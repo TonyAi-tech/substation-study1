@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#08192a">
+<title>Substation 1-1 &amp; 1-3 — Study Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bp-900:#08192a;
+  --bp-800:#0e2436;
+  --bp-700:#143047;
+  --bp-600:#1c3e59;
+  --rule:rgba(160,200,230,.16);
+  --rule-strong:rgba(160,200,230,.34);
+  --paper:#eef4f8;
+  --dim:#93b0c6;
+  --amber:#ffb020;
+  --amber-dim:rgba(255,176,32,.14);
+
+  --band-brown:#7b4a25;
+  --band-red:#d0342c;
+  --band-orange:#e8752a;
+  --band-yellow:#f2c53d;
+  --band-green:#3f9e5c;
+  --band-blue:#2f6fbf;
+  --band-violet:#8a5cc4;
+  --band-gray:#8c9aa5;
+
+  --display:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bp-900);
+  color:var(--paper);
+  font-family:var(--body);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* blueprint grid */
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--rule) 1px,transparent 1px),
+    linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+  background-size:52px 52px;
+  opacity:.5;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,#000 30%,transparent 100%);
+}
+.vignette{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 120% 90% at 50% 0%,rgba(28,62,89,.55),transparent 62%);
+}
+
+/* ---------- shell ---------- */
+.deck{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+
+.rail{
+  position:fixed;left:0;top:0;bottom:0;width:64px;z-index:5;
+  border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:22px 0 26px;
+  background:linear-gradient(180deg,rgba(8,25,42,.9),rgba(8,25,42,.4));
+}
+.rail-mark{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--amber);
+  writing-mode:vertical-rl;text-orientation:mixed;
+}
+.rail-sect{
+  font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--dim);
+  writing-mode:vertical-rl;text-orientation:mixed;
+  max-height:52vh;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.rail-num{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.06em}
+.rail-num b{color:var(--paper);font-weight:600}
+
+.stage{
+  flex:1;margin-left:64px;
+  display:flex;align-items:center;justify-content:center;
+  padding:44px 56px 88px;
+  overflow-y:auto;overflow-x:hidden;
+}
+.slide{display:none;width:100%;max-width:1000px}
+.slide.on{display:block;animation:rise .42s cubic-bezier(.22,.9,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule-strong);max-width:180px}
+
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(42px,7.4vw,86px);line-height:.94;letter-spacing:-.005em;
+  text-transform:uppercase;
+}
+h2{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(30px,4.6vw,52px);line-height:1.02;letter-spacing:.004em;
+  text-transform:uppercase;margin-bottom:22px;
+}
+h3{
+  font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--amber);margin-bottom:12px;
+}
+p{font-size:16.5px;line-height:1.62;color:#d3e2ec;max-width:74ch}
+p+p{margin-top:12px}
+strong{color:#fff;font-weight:600}
+.lede{font-size:19px;color:var(--dim);max-width:66ch;margin-top:18px;line-height:1.6}
+
+/* ---------- components ---------- */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:6px}
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:820px){.cols-2{grid-template-columns:1fr}}
+
+.card{
+  border:1px solid var(--rule);border-left:2px solid var(--amber);
+  background:linear-gradient(180deg,rgba(20,48,71,.62),rgba(14,36,54,.42));
+  padding:18px 20px;border-radius:3px;
+}
+.card h4{
+  font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:7px;color:#fff;
+}
+.card p{font-size:15px;line-height:1.55}
+.card.q{border-left-color:var(--band-blue)}
+.card.g{border-left-color:var(--band-green)}
+.card.r{border-left-color:var(--band-red)}
+
+ul.list{list-style:none;margin-top:4px}
+ul.list li{
+  position:relative;padding-left:26px;margin-bottom:11px;
+  font-size:16px;line-height:1.55;color:#d3e2ec;max-width:72ch;
+}
+ul.list li::before{
+  content:"";position:absolute;left:2px;top:.62em;
+  width:9px;height:1px;background:var(--amber);
+}
+ol.steps{list-style:none;counter-reset:s;margin-top:4px}
+ol.steps li{
+  counter-increment:s;position:relative;padding-left:44px;margin-bottom:13px;
+  font-size:16px;line-height:1.55;color:#d3e2ec;max-width:70ch;
+}
+ol.steps li::before{
+  content:counter(s,decimal-leading-zero);
+  position:absolute;left:0;top:.05em;
+  font-family:var(--mono);font-size:13px;color:var(--amber);
+  border:1px solid var(--rule-strong);border-radius:2px;
+  width:28px;height:26px;display:grid;place-items:center;
+}
+
+table{border-collapse:collapse;width:100%;margin-top:6px;font-size:15.5px}
+th{
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--amber);text-align:left;
+  padding:9px 14px;border-bottom:1px solid var(--rule-strong);
+}
+td{padding:9px 14px;border-bottom:1px solid var(--rule);color:#d3e2ec;vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.k{font-family:var(--mono);font-size:14px;color:#fff;white-space:nowrap}
+td.n{font-family:var(--mono);color:var(--amber);white-space:nowrap}
+
+.formula{
+  font-family:var(--mono);font-size:clamp(19px,2.7vw,30px);font-weight:500;
+  color:#fff;background:var(--amber-dim);border:1px solid rgba(255,176,32,.32);
+  border-radius:3px;padding:18px 24px;margin:16px 0;display:inline-block;
+}
+.calc{
+  font-family:var(--mono);font-size:15px;line-height:2;color:#cfe0ec;
+  border-left:2px solid var(--band-green);padding:10px 0 10px 18px;margin-top:10px;
+}
+.calc b{color:var(--amber);font-weight:600}
+
+.flag{
+  border:1px solid rgba(255,176,32,.4);background:rgba(255,176,32,.09);
+  border-radius:3px;padding:14px 18px;margin-top:20px;
+  font-size:15.5px;line-height:1.55;color:#ffe0a8;max-width:74ch;
+}
+.flag b{color:var(--amber)}
+
+.swatch{display:inline-block;width:15px;height:15px;border-radius:2px;margin-right:9px;vertical-align:-2px;border:1px solid rgba(255,255,255,.22)}
+
+.stat{
+  border:1px solid var(--rule);border-radius:3px;padding:16px 18px;
+  background:rgba(20,48,71,.45);
+}
+.stat .v{font-family:var(--display);font-weight:700;font-size:38px;color:var(--amber);line-height:1}
+.stat .l{font-size:13.5px;color:var(--dim);margin-top:6px;line-height:1.4}
+
+/* section divider slide */
+.divider .no{
+  font-family:var(--mono);font-size:15px;color:var(--amber);letter-spacing:.2em;margin-bottom:18px;
+}
+.divider h1{font-size:clamp(44px,8vw,96px)}
+.divider .bars{display:flex;gap:6px;margin-top:30px}
+.divider .bars i{display:block;width:44px;height:7px;border-radius:1px}
+
+/* title slide */
+.title-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);border:1px solid var(--rule-strong);border-radius:99px;padding:7px 15px;margin-bottom:26px;
+}
+.title-badge i{width:7px;height:7px;border-radius:99px;background:var(--amber);display:block}
+.title-meta{
+  display:flex;flex-wrap:wrap;gap:12px 34px;margin-top:34px;
+  font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.05em;
+}
+.title-meta span b{color:var(--paper);font-weight:500}
+
+/* ---------- controls ---------- */
+.bar{
+  position:fixed;left:64px;right:0;bottom:0;z-index:6;
+  min-height:64px;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  display:flex;align-items:center;gap:18px;padding-left:26px;padding-right:26px;padding-top:0;
+  border-top:1px solid var(--rule);
+  background:linear-gradient(0deg,rgba(8,25,42,.98),rgba(8,25,42,.82));
+  backdrop-filter:blur(8px);
+}
+.bands{flex:1;display:flex;gap:2px;height:8px}
+.bands i{flex:1;background:rgba(255,255,255,.09);border-radius:1px;transition:background .3s,transform .3s;cursor:pointer;transform-origin:bottom}
+.bands i.done{transform:scaleY(1.5)}
+.btn{
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--paper);background:none;border:1px solid var(--rule-strong);border-radius:2px;
+  padding:8px 16px;cursor:pointer;transition:.18s;white-space:nowrap;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;
+}
+.btn:hover{border-color:var(--amber);color:var(--amber)}
+.btn:active{background:var(--amber);color:#0b1c2d;border-color:var(--amber)}
+.btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.btn[disabled]{opacity:.28;cursor:not-allowed;border-color:var(--rule)}
+.count{font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.08em;min-width:62px;text-align:right}
+.count b{color:var(--paper)}
+
+.hint{
+  position:fixed;right:26px;top:64px;z-index:6;
+  font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;opacity:.7;
+}
+
+/* ---------- mode switch ---------- */
+.modes{
+  position:fixed;right:26px;top:20px;z-index:8;display:flex;gap:0;
+  border:1px solid var(--rule-strong);border-radius:2px;overflow:hidden;
+  background:rgba(8,25,42,.86);backdrop-filter:blur(6px);
+}
+.modes button{
+  font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);background:none;border:none;padding:9px 18px;cursor:pointer;transition:.18s;
+}
+.modes button:hover{color:var(--paper)}
+.modes button.active{background:var(--amber);color:#0b1c2d}
+.modes button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+
+/* ---------- flashcards ---------- */
+.cards-view{display:none}
+body.mode-cards .stage{display:none}
+body.mode-cards .bar{display:none}
+body.mode-cards .hint{display:none}
+body.mode-cards .cards-view{
+  display:flex;flex-direction:column;
+  position:fixed;inset:0 0 0 64px;z-index:4;
+  padding:74px 40px 26px;
+}
+
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;flex-shrink:0}
+.chip{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  color:var(--dim);background:rgba(20,48,71,.5);
+  border:1px solid var(--rule);border-radius:99px;
+  padding:6px 13px;cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:7px;
+}
+.chip i{width:7px;height:7px;border-radius:99px;display:block;background:var(--dim)}
+.chip:hover{border-color:var(--rule-strong);color:var(--paper)}
+.chip.on{color:#0b1c2d;background:var(--paper);border-color:var(--paper);font-weight:500}
+.chip.on i{background:#0b1c2d}
+.chip:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+.card-area{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:6px 0}
+
+.flip{
+  width:100%;max-width:820px;height:100%;max-height:440px;min-height:260px;
+  perspective:1600px;cursor:pointer;
+}
+.flip-inner{
+  position:relative;width:100%;height:100%;
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.9,.3,1);
+}
+.flip.flipped .flip-inner{transform:rotateX(180deg)}
+.face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:1px solid var(--rule-strong);border-radius:4px;
+  background:linear-gradient(165deg,rgba(24,56,82,.92),rgba(12,32,49,.92));
+  padding:38px 42px;display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.face-back{transform:rotateX(180deg);border-left:3px solid var(--amber)}
+.face-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:auto;display:flex;align-items:center;gap:9px;flex-shrink:0;
+}
+.face-label i{width:8px;height:8px;border-radius:99px;display:block;background:var(--amber);flex-shrink:0}
+.face-text{
+  font-family:var(--body);color:#fff;
+  font-size:clamp(19px,2.7vw,29px);line-height:1.42;font-weight:500;
+  padding:26px 0;
+}
+.face-back .face-text{font-size:clamp(16px,2vw,22px);line-height:1.55;color:#dceaf4;font-weight:400}
+.face-cue{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin-top:auto;flex-shrink:0;opacity:.75;
+}
+
+.card-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:18px;flex-shrink:0;
+}
+.card-bar .spacer{flex:1}
+.btn-mark{
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule-strong);border-radius:2px;background:none;
+  padding:9px 18px;cursor:pointer;transition:.16s;color:var(--paper);
+}
+.btn-mark.good{border-color:rgba(63,158,92,.55);color:#7fd39a}
+.btn-mark.good:hover{background:rgba(63,158,92,.16);border-color:#3f9e5c}
+.btn-mark.again{border-color:rgba(208,52,44,.5);color:#ef8b84}
+.btn-mark.again:hover{background:rgba(208,52,44,.14);border-color:#d0342c}
+.btn-mark:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+.card-stats{
+  font-family:var(--mono);font-size:12.5px;color:var(--dim);letter-spacing:.06em;
+  display:flex;gap:18px;flex-wrap:wrap;
+}
+.card-stats b{color:var(--paper);font-weight:500}
+.card-stats .ok{color:#7fd39a}
+.card-stats .no{color:#ef8b84}
+
+.meter{height:3px;background:rgba(255,255,255,.09);border-radius:2px;overflow:hidden;margin-top:14px;flex-shrink:0}
+.meter i{display:block;height:100%;background:var(--amber);width:0;transition:width .3s}
+
+.done-panel{
+  display:none;text-align:center;max-width:520px;margin:auto;
+  border:1px solid var(--rule-strong);border-radius:4px;padding:44px 38px;
+  background:linear-gradient(165deg,rgba(24,56,82,.9),rgba(12,32,49,.9));
+}
+.done-panel.on{display:block}
+.done-panel h3{font-size:26px;margin-bottom:14px}
+.done-panel p{font-size:16px;margin:0 auto;color:#cfe0ec}
+.done-panel .row{display:flex;gap:10px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+
+@media(max-width:760px){
+  .modes{right:12px;top:12px}
+  .modes button{padding:8px 12px;font-size:11.5px}
+  body.mode-cards .cards-view{inset:0 0 0 40px;padding:60px 16px 20px}
+  .face{padding:24px 22px}
+  .flip{max-height:none}
+  .card-bar{gap:8px}
+  .btn-mark{padding:8px 13px;font-size:12.5px;flex:1}
+  .card-stats{font-size:11.5px;gap:12px;width:100%;order:5}
+}
+
+@media(max-width:760px){
+  .rail{width:40px}
+  .rail-sect{font-size:10px;letter-spacing:.2em}
+  .stage{margin-left:40px;padding:28px 20px calc(96px + env(safe-area-inset-bottom,0px))}
+  .bar{left:40px;padding-left:12px;padding-right:12px;gap:8px;min-height:60px}
+  .btn{padding:11px 13px;font-size:13px;min-height:44px;display:inline-flex;align-items:center}
+  .bands{gap:1px}
+  .count{min-width:auto;font-size:12px}
+  .hint{display:none}
+  h1{font-size:clamp(34px,10vw,54px)}
+  h2{font-size:clamp(25px,7vw,36px)}
+  table{font-size:14px}
+  th,td{padding:8px 9px}
+  body.mode-cards .cards-view{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+  .btn-mark{min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  .slide.on{animation:none}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="vignette"></div>
+
+<aside class="rail">
+  <div class="rail-mark">CAL NEV JATC</div>
+  <div class="rail-sect" id="railSect">Substation 1-1</div>
+  <div class="rail-num"><b id="railNum">01</b></div>
+</aside>
+
+<div class="modes">
+  <button id="mSlides" class="active">Slides</button>
+  <button id="mCards">Flashcards</button>
+</div>
+<div class="hint">← → or SPACE to navigate</div>
+
+<main class="stage" id="stage">
+
+<!-- 1 -->
+<section class="slide on" data-sect="Cover">
+  <div class="title-badge"><i></i> IBEW / NECA Apprenticeship</div>
+  <h1>Substation<br>1-1 &amp; 1-3</h1>
+  <p class="lede">Everything from the study guide, rebuilt for fast review. Program rules, industry history, electrical theory, and every formula you'll be tested on.</p>
+  <div class="title-meta">
+    <span>PASSING AVERAGE — <b>75%</b></span>
+    <span>TESTS — <b>Every 3–4 weeks</b></span>
+    <span>SLIDES — <b id="totalMeta">38</b></span>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-sect="Test Facts">
+  <div class="eyebrow">Know this cold</div>
+  <h2>Quick Test Facts</h2>
+  <div class="cols">
+    <div class="stat"><div class="v">75%</div><div class="l">Minimum passing average. Most students land in the 80s.</div></div>
+    <div class="stat"><div class="v">3–4</div><div class="l">Weeks between tests. Every test is closed-book.</div></div>
+    <div class="stat"><div class="v">100%</div><div class="l">Of a multi-part question must be right to earn credit.</div></div>
+  </div>
+  <ul class="list" style="margin-top:24px">
+    <li>Formats you'll see: true/false, multiple choice, fill-in-the-blank, and math problems.</li>
+    <li>Show your work on every math problem or you don't get credit.</li>
+    <li>Read questions carefully — most mistakes come from rushing, not from not knowing.</li>
+  </ul>
+  <div class="flag"><b>Golden rule:</b> No one can learn for you. The instructor guides — you do the studying.</div>
+</section>
+
+<!-- 3 divider -->
+<section class="slide divider" data-sect="Part 1 — The Program">
+  <div class="no">PART 01</div>
+  <h1>The Program,<br>Your Role &amp;<br>Professionalism</h1>
+  <p class="lede">Lessons 1–11. How to study, what the Committee expects, where the IBEW and NECA came from, and what it means to act like a professional.</p>
+  <div class="bars">
+    <i style="background:var(--band-brown)"></i><i style="background:var(--band-red)"></i><i style="background:var(--band-orange)"></i><i style="background:var(--band-yellow)"></i>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-sect="Lesson 1 — How to Study">
+  <div class="eyebrow">Lesson 1</div>
+  <h2>The Study Loop</h2>
+  <p>Run this same six-step cycle on every lesson. It's the whole method.</p>
+  <ol class="steps" style="margin-top:20px">
+    <li><strong>Read the intro</strong> — get the big picture before anything else.</li>
+    <li><strong>Check the learning objectives</strong> — that's your target for the lesson.</li>
+    <li><strong>Skim the lesson questions</strong> — now you know what to look for while reading.</li>
+    <li><strong>Read the references carefully</strong> — if you can't explain it in your own words, you don't know it yet. Underline key points.</li>
+    <li><strong>Answer the questions</strong> — go back to the material on anything you're unsure of.</li>
+    <li><strong>Review before class</strong> — be ready to answer out loud.</li>
+  </ol>
+  <div class="flag">A little every day beats cramming. And if you don't put in the effort, the Committee can remove you from the program.</div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-sect="Lesson 3 — Attributes">
+  <div class="eyebrow">Lessons 2 &amp; 3</div>
+  <h2>The Four Traits<br>the AJATC Looks For</h2>
+  <div class="cols" style="margin-top:20px">
+    <div class="card"><h4>Responsibility</h4><p>Show up, meet deadlines, follow through on what you agreed to when you signed the contract.</p></div>
+    <div class="card q"><h4>Aptitude</h4><p>You can actually learn the trade — both classroom theory and hands-on work.</p></div>
+    <div class="card g"><h4>Motivation</h4><p>You want to learn, not just get through it. It shows in attendance and attitude.</p></div>
+    <div class="card r"><h4>Personality</h4><p>You represent the trade well and work well with the crew.</p></div>
+  </div>
+  <ul class="list" style="margin-top:22px">
+    <li>The program runs roughly <strong>3.5 years and ~5,000 hours</strong> of combined classroom and on-the-job training.</li>
+    <li>Miss expectations and raises can be delayed — or you can be dismissed.</li>
+    <li>Struggling? Study more <em>and</em> write down a specific question. A clear question helps you and the whole class.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-sect="Lesson 4 — The Industry">
+  <div class="eyebrow">Lesson 4</div>
+  <h2>Your Job &amp; the<br>Future of the Trade</h2>
+  <div class="cols-2" style="margin-top:20px">
+    <div>
+      <h3>Why the work is there</h3>
+      <ul class="list">
+        <li>Construction is a major driver of the U.S. economy — when the economy grows, construction grows with it.</li>
+        <li>There's a real <strong>skilled worker shortage</strong>. Qualified electricians are in demand.</li>
+        <li>Contractors won't hire someone who just claims to be an electrician — you're already ahead by committing to the apprenticeship.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Where it's headed</h3>
+      <ul class="list">
+        <li>Electrical work is no longer just lighting — it's fiber optics, solar, and smart buildings.</li>
+        <li>Skilled workers can move into supervisory roles or become contractors themselves.</li>
+        <li>Success = technical skill <strong>plus</strong> being productive, dependable, and good on a team.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flag">Contractors rely on organizations like the IBEW to make sure they have access to skilled workers who keep them profitable. Your skill and attitude shape the future of the trade.</div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-sect="Lesson 5 — Harassment">
+  <div class="eyebrow">Lesson 5</div>
+  <h2>Sexual Harassment</h2>
+  <div class="cols-2">
+    <div>
+      <h3>What the law says</h3>
+      <ul class="list">
+        <li>Violates <strong>Title VII of the Civil Rights Act of 1964</strong>.</li>
+        <li>Two legal categories: <strong>quid pro quo</strong> and <strong>hostile work environment</strong>.</li>
+        <li>It doesn't have to be sexual in nature — unfair job assignments based on gender count too.</li>
+        <li>The EEOC reviews the whole record and judges each case on its own facts.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What you do</h3>
+      <ul class="list">
+        <li>If it's unwelcome and the recipient finds it offensive, it's harassment — intent doesn't decide it.</li>
+        <li>Victim or witness? Report it to the proper company official <strong>immediately</strong>.</li>
+        <li>Confidentiality matters — you may end up a witness.</li>
+        <li>Watch what you say and what goes on your hard hat.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flag"><b>Prevention is the best tool.</b> You represent your apprenticeship, the IBEW, your contractor, and the utility. Apprentices have been dismissed for this.</div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-sect="Lessons 6 &amp; 7 — History">
+  <div class="eyebrow">Lessons 6 &amp; 7</div>
+  <h2>IBEW &amp; NECA Timeline</h2>
+  <table>
+    <tr><th style="width:110px">Year</th><th>Milestone</th></tr>
+    <tr><td class="n">1890</td><td>15–20 cents an hour was considered a good wage.</td></tr>
+    <tr><td class="n">1891</td><td><strong>First IBEW Convention</strong>, held in St. Louis on November 21.</td></tr>
+    <tr><td class="n">1901</td><td><strong>NECA founded</strong> at the Pan-American Exposition in Buffalo, NY.</td></tr>
+    <tr><td class="n">1920</td><td>Strikes peak — as many as 200 at once. IBEW + NECA form the <strong>CIR</strong> to arbitrate disputes.</td></tr>
+    <tr><td class="n">1924</td><td>IBEW Research Department established.</td></tr>
+    <tr><td class="n">1928</td><td>IBEW establishes a pension fund.</td></tr>
+    <tr><td class="n">1938</td><td>Labor Relations Department created.</td></tr>
+    <tr><td class="n">1946</td><td>Pension fund expands into the <strong>National Electrical Benefit Fund (NEBF)</strong>.</td></tr>
+    <tr><td class="n">1986</td><td>IBEW membership reaches nearly <strong>870,000</strong>.</td></tr>
+  </table>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-sect="Key Organizations">
+  <div class="eyebrow">Don't mix these up</div>
+  <h2>Who Does What</h2>
+  <div class="cols" style="margin-top:20px">
+    <div class="card"><h4>IBEW</h4><p>The union — represents the <strong>workers</strong>. Founded 1891. Organizes, bargains, and protects members.</p></div>
+    <div class="card q"><h4>NECA</h4><p>Represents the <strong>contractors</strong>. Founded 1901. Sets standards, lobbies, and promotes the industry. Organized into <strong>9 geographic districts</strong> plus 1 district for outside line construction.</p></div>
+    <div class="card g"><h4>CIR</h4><p>Council on Industrial Relations, formed <strong>1920</strong>. The referee between IBEW and NECA — resolves disputes by arbitration instead of strikes.</p></div>
+    <div class="card r"><h4>NEBF</h4><p>National Electrical Benefit Fund, <strong>1946</strong>. Retirement benefits funded by employer contributions — a percentage of gross payroll. HQ in Bethesda, MD.</p></div>
+    <div class="card" style="border-left-color:var(--band-violet)"><h4>NJAC / NJATC</h4><p>The joint training committee, formed <strong>1941</strong> — the origin of national apprenticeship standards.</p></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-sect="Lesson 8 — Drugs">
+  <div class="eyebrow">Lesson 8</div>
+  <h2>Types of Drugs<br>&amp; Their Effects</h2>
+  <table>
+    <tr><th style="width:180px">Category</th><th>What it covers</th></tr>
+    <tr><td class="k">Legal</td><td>Alcohol and prescription medication. Legal doesn't mean safe — both are harmful when misused and can lead to dependence.</td></tr>
+    <tr><td class="k">Illegal</td><td>Marijuana, cocaine, heroin, PCP. Carry health risk <em>and</em> legal risk.</td></tr>
+    <tr><td class="k">Prescription</td><td>Fine when prescribed, addictive when misused.</td></tr>
+  </table>
+  <h3 style="margin-top:26px">Specific effects</h3>
+  <table>
+    <tr><td class="k">Alcohol</td><td>Mind-altering. Chronic use leads to liver disease, brain damage, and accidents.</td></tr>
+    <tr><td class="k">Marijuana</td><td>Damages lungs, impairs memory and judgment, affects brain development in youth.</td></tr>
+    <tr><td class="k">Cocaine</td><td>Highly addictive — heart problems, seizures, overdose, and severe cravings.</td></tr>
+    <tr><td class="k">Heroin</td><td>Addictive opiate. Physical dependence; needle sharing spreads disease.</td></tr>
+    <tr><td class="k">PCP</td><td>Distorts reality and impairs judgment; can cause aggression and long-term cognitive issues.</td></tr>
+  </table>
+  <div class="flag">Alcohol, tobacco, and marijuana are commonly called <b>"gateway" drugs</b> — the usual starting point, often driven by peer pressure.</div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-sect="Four Stages">
+  <div class="eyebrow">Lesson 8</div>
+  <h2>The Four Stages of<br>Alcohol &amp; Drug Use</h2>
+  <ol class="steps" style="margin-top:20px">
+    <li><strong>Experimentation</strong> — trying it, usually socially. No obvious behavioral signs yet.</li>
+    <li><strong>Regular Use</strong> — more frequent. Friends change, school or work performance starts slipping.</li>
+    <li><strong>Preoccupation &amp; Daily Use</strong> — the drug becomes the focus. Motivation disappears; the desire for it takes over.</li>
+    <li><strong>Dependence &amp; Severe Effects</strong> — physical and mental deterioration. Depression, family and legal trouble, blackouts, possible overdose.</li>
+  </ol>
+  <div class="cols-2" style="margin-top:24px">
+    <div>
+      <h3>Warning signs</h3>
+      <ul class="list">
+        <li>Mood swings, unexplained weight loss, bloodshot eyes</li>
+        <li>Declining performance at work or school</li>
+        <li>Frequent intoxication, driving under the influence</li>
+        <li>Using alcohol to cope with problems</li>
+      </ul>
+    </div>
+    <div>
+      <h3>How to help</h3>
+      <ul class="list">
+        <li>Acknowledging the issue is the first step.</li>
+        <li>Be understanding, firm, and supportive — not critical or judgmental.</li>
+        <li>Offer help finding treatment without enabling the behavior.</li>
+        <li>Groups like <strong>Al-Anon</strong> support families and connect you with local resources.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-sect="Lesson 9 — National Program">
+  <div class="eyebrow">Lesson 9</div>
+  <h2>NJATC → electrical<br>training ALLIANCE</h2>
+  <table>
+    <tr><th style="width:120px">Year</th><th>Milestone</th></tr>
+    <tr><td class="n">1941</td><td><strong>NJASC</strong> formed with 12 reps — 6 IBEW, 6 NECA — creating the first National Training Standards. <strong>NJATC</strong> follows on August 14.</td></tr>
+    <tr><td class="n">1953</td><td>Six primary objectives set; the National office is founded.</td></tr>
+    <tr><td class="n">1960–61</td><td>Local programs align with national standards. First <strong>Inside Wireman</strong> course introduced in 1961.</td></tr>
+    <tr><td class="n">1969</td><td><strong>Inside apprenticeship set to 4 years</strong>; Outside set to 3 years. Two-year Residential program in development.</td></tr>
+    <tr><td class="n">1970s</td><td>Focus on quality standards, selection procedures, and curriculum materials.</td></tr>
+    <tr><td class="n">1983–86</td><td>New Journeyman-level courses added. Over <strong>30 courses</strong> available by 1986.</td></tr>
+    <tr><td class="n">1990</td><td><strong>National Training Institute (NTI)</strong> launched with a university partner.</td></tr>
+    <tr><td class="n">1990s</td><td>College credit becomes available through the <strong>American Council on Education (ACE)</strong>.</td></tr>
+    <tr><td class="n">2014</td><td>NJATC becomes the <strong>electrical training ALLIANCE</strong>.</td></tr>
+  </table>
+  <div class="flag">Today the Alliance supports over <b>4,000 IBEW members</b> working as instructors.</div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-sect="Lesson 10 — Constitution">
+  <div class="eyebrow">Lesson 10</div>
+  <h2>The IBEW Constitution</h2>
+  <div class="cols-2" style="margin-top:16px">
+    <div>
+      <h3>Core objectives</h3>
+      <ul class="list">
+        <li>Assist others in sickness and distress</li>
+        <li>Cultivate friendship among those in the industry</li>
+        <li>Organize all workers in the entire electrical industry</li>
+        <li>Secure adequate pay</li>
+        <li>Secure employment</li>
+        <li>Seek security for the individual</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rules worth memorizing</h3>
+      <ul class="list">
+        <li>Local Union meetings must adjourn by <strong>11:00 PM</strong>.</li>
+        <li>A Local can meet <strong>twice a month</strong> without declaring a special call.</li>
+        <li>Members owing <strong>6 months' dues</strong> aren't eligible for pension and death benefits.</li>
+        <li>Owe <strong>3 months of dues</strong> and you risk being <strong>suspended</strong> from membership.</li>
+        <li>To hold office you need <strong>5 years of continuous good standing</strong>.</li>
+        <li>Nominations for officers are held in <strong>May</strong> of election years.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flag">Dues are divided between the <b>General Fund</b> and the <b>Pension Fund</b>. To be a good union member, be an informed one — take part in your Local's activities.</div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-sect="Lesson 11 — Professionalism">
+  <div class="eyebrow">Lesson 11</div>
+  <h2>Professional Conduct</h2>
+  <p>A <strong>Qualified Electrical Worker (QEW)</strong> is held to the same standard of conduct and responsibility as a doctor or a lawyer.</p>
+  <div class="cols-2" style="margin-top:22px">
+    <div>
+      <h3>Traits of a professional</h3>
+      <ul class="list">
+        <li>Responsible, timely, reliable, proactive</li>
+        <li>Honest and trustworthy — shows integrity</li>
+        <li>Service-minded and team-oriented</li>
+        <li>Communicates well and respects authority</li>
+        <li>Maintains confidentiality</li>
+        <li>Presents a positive image of the employer</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Benefits of IBEW membership</h3>
+      <ul class="list">
+        <li>Better training and higher wages</li>
+        <li>Better benefits and more job security</li>
+        <li>Greater democracy in the workplace</li>
+        <li>Better health and safety</li>
+        <li>Collective bargaining</li>
+        <li>Greater equity in pay</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flag">Professionalism starts in the apprenticeship and continues your whole career. The first step is recognizing your role in the organization and how it affects the company.</div>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-sect="Absenteeism">
+  <div class="eyebrow">Lesson 11</div>
+  <h2>What Missing<br>a Day Really Costs</h2>
+  <div class="cols-2" style="margin-top:18px">
+    <div>
+      <table>
+        <tr><th>Cost of one absence</th><th style="text-align:right">Per day</th></tr>
+        <tr><td>Lost wages</td><td class="n" style="text-align:right">$200</td></tr>
+        <tr><td>Benefits</td><td class="n" style="text-align:right">$110</td></tr>
+        <tr><td>Equipment &amp; crew reassignment</td><td class="n" style="text-align:right">$600</td></tr>
+        <tr><td><strong>Total daily</strong></td><td class="n" style="text-align:right"><strong>$910</strong></td></tr>
+        <tr><td>Monthly (8 days out)</td><td class="n" style="text-align:right">$7,280</td></tr>
+        <tr><td><strong>Yearly</strong></td><td class="n" style="text-align:right"><strong>$87,360</strong></td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="stat" style="margin-bottom:16px"><div class="v">60%</div><div class="l">Of all accidents — minor to fatal — happen when crews get merged because someone called out.</div></div>
+      <h3>What actually causes it</h3>
+      <p style="font-size:15px">A survey of 1,000 workers across 13 companies found <strong>no link</strong> between absenteeism and pay satisfaction, feelings about the company, or feeling overworked.</p>
+      <p style="font-size:15px">What <em>did</em> correlate: <strong>poor physical working conditions</strong>, and whether a worker sees themself as a professional. Those who felt replaceable had the highest absenteeism.</p>
+    </div>
+  </div>
+  <div class="flag"><b>Case study:</b> A foreman called in sick. A replacement foreman made poor safety decisions, and a worker was injured and off work for 13 months. Root cause: the absence itself.</div>
+</section>
+
+<!-- 16 divider -->
+<section class="slide divider" data-sect="Part 2 — Electricity">
+  <div class="no">PART 02</div>
+  <h1>Electricity<br>Fundamentals</h1>
+  <p class="lede">What electricity actually is, the four ways we make it, how batteries work, and what makes a circuit complete.</p>
+  <div class="bars">
+    <i style="background:var(--band-green)"></i><i style="background:var(--band-blue)"></i><i style="background:var(--band-violet)"></i><i style="background:var(--amber)"></i>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-sect="What Is Electricity">
+  <div class="eyebrow">Fundamentals</div>
+  <h2>What Electricity Is</h2>
+  <p>Electricity is a form of energy created by the <strong>movement of electrons</strong> — tiny charged particles — through a conductor like a copper wire.</p>
+  <div class="cols-2" style="margin-top:24px">
+    <div class="card"><h4>Static Electricity</h4><p>Charge builds up on a surface and stays put. It's an imbalance of charge — like your hair standing up after you take off a hat.</p></div>
+    <div class="card q"><h4>Current Electricity</h4><p>The continuous flow of electrons through a conductor. This is what powers your tools, devices, and buildings.</p></div>
+  </div>
+  <h3 style="margin-top:30px">DC vs. AC</h3>
+  <table>
+    <tr><td class="k">DC — Direct Current</td><td>Electrons flow in <strong>one direction</strong> only.</td></tr>
+    <tr><td class="k">AC — Alternating Current</td><td>Electrons <strong>reverse direction periodically</strong>.</td></tr>
+  </table>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-sect="Making Electricity">
+  <div class="eyebrow">Fundamentals</div>
+  <h2>Four Ways We<br>Make Electricity</h2>
+  <div class="cols" style="margin-top:20px">
+    <div class="card"><h4>Magnetism</h4><p>A magnet creates an invisible field that exerts force on magnetic materials like iron. The foundation for everything below it.</p></div>
+    <div class="card q"><h4>Electromagnetic Induction</h4><p>Move a conductor through a magnetic field — or spin a magnetic field near a coil — and electrons are pushed into motion. <strong>This is how power plants work:</strong> steam, wind, or water spins a turbine near magnets. Faster spin = more electricity.</p></div>
+    <div class="card g"><h4>Thermoelectricity</h4><p>Heat one side of a special material and keep the other cool. The <strong>temperature difference</strong> drives electrons from hot to cold, creating current. Used in portable coolers and remote generators.</p></div>
+    <div class="card r"><h4>Piezoelectricity</h4><p>Squeeze or stretch certain crystals like quartz and they produce a charge. Think of squeezing a sponge — except electricity comes out instead of water. <strong>Example:</strong> the spark when you click a lighter.</p></div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-sect="Batteries">
+  <div class="eyebrow">Fundamentals</div>
+  <h2>How a Battery Works</h2>
+  <p>A battery converts <strong>chemical energy into electrical energy</strong> through a chemical reaction. An electrolyte battery and a lead-acid battery are the same thing.</p>
+  <ol class="steps" style="margin-top:20px">
+    <li><strong>Anode (negative side)</strong> — releases electrons.</li>
+    <li><strong>Cathode (positive side)</strong> — accepts electrons.</li>
+    <li><strong>Electrolyte</strong> — a liquid or paste that lets charged particles (ions) move between anode and cathode.</li>
+    <li>Connect it to a circuit and the reaction at the anode releases electrons, which flow through the wire to the cathode. <strong>That flow is the current.</strong></li>
+  </ol>
+  <div class="flag">Connect a copper wire to a battery and the electric field pushes free electrons away from the negative terminal and pulls them toward the positive. Electrons hop atom to atom — that's the flow of charge we call electricity. Heat is produced along the way from the current flowing through the conductor.</div>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-sect="Primary vs Secondary">
+  <div class="eyebrow">Fundamentals</div>
+  <h2>Primary vs.<br>Secondary Cells</h2>
+  <p>The only difference that matters: <strong>can it be recharged?</strong></p>
+  <table style="margin-top:20px">
+    <tr><th style="width:200px">Type</th><th>Rechargeable</th><th>Used for</th><th>Examples</th></tr>
+    <tr>
+      <td class="k">Primary cell</td>
+      <td style="color:var(--band-red)">No — single use</td>
+      <td>Remote controls, flashlights, cameras — anywhere recharging isn't practical.</td>
+      <td>AA, AAA, button cells</td>
+    </tr>
+    <tr>
+      <td class="k">Secondary cell</td>
+      <td style="color:var(--band-green)">Yes — reusable</td>
+      <td>Long-term power: smartphones, laptops, electric cars.</td>
+      <td>Lithium-ion, NiMH, Lead-acid</td>
+    </tr>
+  </table>
+  <div class="flag">Secondary cells are more economical and more environmentally friendly over their lifetime.</div>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-sect="Circuits &amp; Switches">
+  <div class="eyebrow">Fundamentals</div>
+  <h2>Circuits &amp; Switches</h2>
+  <div class="cols-2" style="margin-top:16px">
+    <div>
+      <h3>Complete circuit</h3>
+      <ul class="list">
+        <li>A complete circuit lets current flow <strong>to the load and back to the source</strong>.</li>
+        <li>A schematic is the electrical drawing that shows that path — you'll use them constantly.</li>
+        <li>As an incandescent lamp's filament resistance <strong>increases</strong>, its wattage rating <strong>decreases</strong>. Lamps use poor conductors that get hot and glow red or white hot.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Switches</h3>
+      <ul class="list">
+        <li>A switch is a <strong>mechanical device</strong> that allows or interrupts current flow.</li>
+        <li><strong>Closed = ON.</strong> The circuit is complete and current flows.</li>
+        <li><strong>Open = OFF.</strong> The path is broken — this is an <strong>open circuit</strong>.</li>
+        <li>Switches are rated by <strong>maximum current and maximum voltage</strong>.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flag"><b>Test trap:</b> The location of the switch in the circuit doesn't matter. All it has to do is separate the terminals of the source so electrons can't flow.</div>
+</section>
+
+<!-- 22 divider -->
+<section class="slide divider" data-sect="Part 3 — Math">
+  <div class="no">PART 03</div>
+  <h1>The Math<br>You Need</h1>
+  <p class="lede">Fractions, decimals, percentages, and the calculator shortcuts that save you time on test day.</p>
+  <div class="bars">
+    <i style="background:var(--band-yellow)"></i><i style="background:var(--band-orange)"></i><i style="background:var(--band-red)"></i><i style="background:var(--band-brown)"></i>
+  </div>
+</section>
+
+<!-- 23 -->
+<section class="slide" data-sect="Fractions &amp; Decimals">
+  <div class="eyebrow">Math review</div>
+  <h2>Fractions, Decimals<br>&amp; Percentages</h2>
+  <table>
+    <tr><th style="width:270px">Conversion</th><th>Method</th><th>Example</th></tr>
+    <tr><td class="k">Decimal → Fraction</td><td>Put the decimal over its place value, then reduce.</td><td class="n">0.6 = 6/10 = 3/5</td></tr>
+    <tr><td class="k">Fraction → Decimal</td><td>Divide the top by the bottom.</td><td class="n">1/3 = 0.333</td></tr>
+    <tr><td class="k">Improper → Mixed</td><td>Divide; the remainder becomes the new numerator.</td><td class="n">22/7 = 3 1/7</td></tr>
+    <tr><td class="k">Mixed → Improper</td><td>Whole × denominator, add numerator, keep the denominator.</td><td class="n">4 3/4 = 19/4</td></tr>
+  </table>
+  <h3 style="margin-top:30px">Percentages</h3>
+  <div class="formula">Part = Whole × Percent</div>
+  <p>Know any two of the three and you can always solve for the third.</p>
+  <div class="calc">
+    22.5 is 15% of <b>150</b><br>
+    2.20 is 5% of <b>44</b><br>
+    1455 is 150% of <b>970</b><br>
+    22 is 5% of <b>440</b>
+  </div>
+</section>
+
+<!-- 24 -->
+<section class="slide" data-sect="Calculator">
+  <div class="eyebrow">TI-30X IIS</div>
+  <h2>Calculator Shortcuts</h2>
+  <p>The school-issued calculator handles fractions directly — learn these three sequences.</p>
+  <table style="margin-top:20px">
+    <tr><th style="width:300px">To do this</th><th>Press</th></tr>
+    <tr><td class="k">Mixed → improper fraction<br><span style="color:var(--dim);font-size:13px">4 ¾ → 19/4</span></td><td class="n">4 · A b/c · 3 · A b/c · 4 · = · 2nd · A b/c</td></tr>
+    <tr><td class="k">Add fractions<br><span style="color:var(--dim);font-size:13px">¾ + ¼ → 1</span></td><td class="n">3 · A b/c · 4 · + · 1 · A b/c · 4 · =</td></tr>
+    <tr><td class="k">Decimal → fraction<br><span style="color:var(--dim);font-size:13px">.333333333 → 1/3</span></td><td class="n">.333333333 · 2nd · PRB (F↔D)</td></tr>
+  </table>
+  <div class="flag">Remember: on the test you still have to <b>show your work</b>. The calculator checks your answer — it doesn't replace the steps.</div>
+</section>
+
+<!-- 25 divider -->
+<section class="slide divider" data-sect="Part 4 — Resistors &amp; Ohm's Law">
+  <div class="no">PART 04</div>
+  <h1>Resistors &amp;<br>Ohm's Law</h1>
+  <p class="lede">Reading color bands, and the twelve formulas that come off the wheel.</p>
+  <div class="bars">
+    <i style="background:var(--band-red)"></i><i style="background:var(--band-red)"></i><i style="background:var(--band-orange)"></i><i style="background:var(--band-gray)"></i>
+  </div>
+</section>
+
+<!-- 26 -->
+<section class="slide" data-sect="Resistor Color Code">
+  <div class="eyebrow">Resistors</div>
+  <h2>Reading the Bands</h2>
+  <p>A <strong>resistor</strong> limits or regulates the flow of current in a circuit. Read the bands <strong>left to right</strong>.</p>
+  <div class="cols-2" style="margin-top:22px">
+    <div>
+      <h3>Band order</h3>
+      <ul class="list">
+        <li><strong>4-band:</strong> digit · digit · multiplier · tolerance</li>
+        <li><strong>5-band:</strong> digit · digit · digit · multiplier · tolerance</li>
+      </ul>
+      <h3 style="margin-top:24px">Worked example</h3>
+      <div class="calc">
+        Red = <b>2</b><br>
+        Red = <b>2</b><br>
+        Orange = <b>×1,000</b><br>
+        22 × 1,000 = <b>22,000 Ω = 22 kΩ</b>
+      </div>
+    </div>
+    <div>
+      <h3>Digit values</h3>
+      <table>
+        <tr><td><span class="swatch" style="background:#111"></span>Black</td><td class="n">0</td><td><span class="swatch" style="background:var(--band-green)"></span>Green</td><td class="n">5</td></tr>
+        <tr><td><span class="swatch" style="background:var(--band-brown)"></span>Brown</td><td class="n">1</td><td><span class="swatch" style="background:var(--band-blue)"></span>Blue</td><td class="n">6</td></tr>
+        <tr><td><span class="swatch" style="background:var(--band-red)"></span>Red</td><td class="n">2</td><td><span class="swatch" style="background:var(--band-violet)"></span>Violet</td><td class="n">7</td></tr>
+        <tr><td><span class="swatch" style="background:var(--band-orange)"></span>Orange</td><td class="n">3</td><td><span class="swatch" style="background:var(--band-gray)"></span>Gray</td><td class="n">8</td></tr>
+        <tr><td><span class="swatch" style="background:var(--band-yellow)"></span>Yellow</td><td class="n">4</td><td><span class="swatch" style="background:#f2f2f2"></span>White</td><td class="n">9</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 27 -->
+<section class="slide" data-sect="Tolerance">
+  <div class="eyebrow">Resistors</div>
+  <h2>Tolerance Bands</h2>
+  <table style="max-width:520px">
+    <tr><th>Color</th><th>Tolerance</th></tr>
+    <tr><td><span class="swatch" style="background:var(--band-brown)"></span>Brown</td><td class="n">±1%</td></tr>
+    <tr><td><span class="swatch" style="background:var(--band-red)"></span>Red</td><td class="n">±2%</td></tr>
+    <tr><td><span class="swatch" style="background:#c9a227"></span>Gold</td><td class="n">±5%</td></tr>
+    <tr><td><span class="swatch" style="background:#b9c2c9"></span>Silver</td><td class="n">±10%</td></tr>
+    <tr><td><span class="swatch" style="background:transparent;border-style:dashed"></span>No band</td><td class="n">±20%</td></tr>
+  </table>
+  <div class="flag" style="margin-top:26px"><b>Classic test trap:</b> A resistor with only <b>three</b> color bands is really a 4-band resistor with the tolerance band missing — which defaults to <b>±20%</b>.</div>
+  <h3 style="margin-top:28px">Tolerance range example</h3>
+  <div class="calc">
+    Green–Black–Green–Silver<br>
+    3 · 0 · ×100,000 · ±10%<br>
+    30 × 100,000 = <b>3,000,000 Ω</b><br>
+    3,000,000 × 10% = <b>±300,000 Ω</b><br>
+    Acceptable range: <b>2,700,000 to 3,300,000 Ω</b>
+  </div>
+</section>
+
+<!-- 28 -->
+<section class="slide" data-sect="Ohm's Law">
+  <div class="eyebrow">The wheel, flattened</div>
+  <h2>Ohm's Law Formulas</h2>
+  <div class="cols" style="margin-top:6px;margin-bottom:22px">
+    <div class="stat"><div class="v">E</div><div class="l">Electromotive Force · Potential · <strong>Volts</strong></div></div>
+    <div class="stat"><div class="v">I</div><div class="l">Current · <strong>Amps</strong></div></div>
+    <div class="stat"><div class="v">R</div><div class="l">Resistance · <strong>Ohms</strong></div></div>
+    <div class="stat"><div class="v">P</div><div class="l">Power · <strong>Watts</strong></div></div>
+  </div>
+  <table>
+    <tr><th style="width:150px">To find</th><th>Option 1</th><th>Option 2</th><th>Option 3</th></tr>
+    <tr><td class="k">E (Volts)</td><td class="n">I × R</td><td class="n">P ÷ I</td><td class="n">√(P × R)</td></tr>
+    <tr><td class="k">I (Amps)</td><td class="n">E ÷ R</td><td class="n">P ÷ E</td><td class="n">√(P ÷ R)</td></tr>
+    <tr><td class="k">R (Ohms)</td><td class="n">E ÷ I</td><td class="n">E² ÷ P</td><td class="n">P ÷ I²</td></tr>
+    <tr><td class="k">P (Watts)</td><td class="n">E × I</td><td class="n">E² ÷ R</td><td class="n">I² × R</td></tr>
+  </table>
+  <div class="calc" style="margin-top:22px">
+    An alarm clock draws 0.5 A at 120 V. Resistance? &nbsp;R = E ÷ I = 120 ÷ 0.5 = <b>240 Ω</b><br>
+    A coffee maker on 120 V with 20 Ω. Watts? &nbsp;P = E² ÷ R = 14,400 ÷ 20 = <b>720 W</b>
+  </div>
+</section>
+
+<!-- 29 divider -->
+<section class="slide divider" data-sect="Part 5 — Circuits">
+  <div class="no">PART 05</div>
+  <h1>Series vs.<br>Parallel</h1>
+  <p class="lede">Two circuit types, five laws each. Get the difference locked in and half the test math gets easier.</p>
+  <div class="bars">
+    <i style="background:var(--band-blue)"></i><i style="background:var(--band-green)"></i><i style="background:var(--amber)"></i><i style="background:var(--band-violet)"></i>
+  </div>
+</section>
+
+<!-- 30 -->
+<section class="slide" data-sect="Series Circuits">
+  <div class="eyebrow">One path</div>
+  <h2>Laws of Series Circuits</h2>
+  <ol class="steps" style="margin-top:18px">
+    <li>Has only <strong>ONE path</strong> for current to flow.</li>
+    <li>Total source voltage equals the sum of each load voltage. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">E<sub>T</sub> = E₁ + E₂ + E₃</span></li>
+    <li>Current stays the <strong>same</strong> throughout. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">I<sub>T</sub> = I₁ = I₂ = I₃</span></li>
+    <li>Total resistance equals the sum of each load resistance. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">R<sub>T</sub> = R₁ + R₂ + R₃</span></li>
+    <li>Total power equals the sum of each load's power. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">P<sub>T</sub> = P₁ + P₂ + P₃</span></li>
+  </ol>
+  <table style="margin-top:24px;max-width:520px">
+    <tr><th>Series help box</th><th>Behavior</th></tr>
+    <tr><td class="k">Voltage</td><td style="color:var(--amber)">Adds</td></tr>
+    <tr><td class="k">Current</td><td style="color:var(--band-green)">Same</td></tr>
+    <tr><td class="k">Resistance</td><td style="color:var(--amber)">Adds</td></tr>
+    <tr><td class="k">Power</td><td style="color:var(--amber)">Adds</td></tr>
+  </table>
+</section>
+
+<!-- 31 -->
+<section class="slide" data-sect="Parallel Circuits">
+  <div class="eyebrow">Multiple paths</div>
+  <h2>Laws of Parallel Circuits</h2>
+  <ol class="steps" style="margin-top:18px">
+    <li>Has <strong>MULTIPLE paths</strong> for current to flow.</li>
+    <li>Voltage stays the <strong>same</strong> throughout. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">E<sub>T</sub> = E₁ = E₂ = E₃</span></li>
+    <li>Total source current equals the sum of each load current. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">I<sub>T</sub> = I₁ + I₂ + I₃</span></li>
+    <li>Total resistance is <strong>always less than the smallest resistor</strong>.</li>
+    <li>Total power equals the sum of each load's power. &nbsp;<span style="font-family:var(--mono);color:var(--amber)">P<sub>T</sub> = P₁ + P₂ + P₃</span></li>
+  </ol>
+  <div class="formula">R<sub>Total</sub> = 1 ÷ (1/R₁ + 1/R₂ + 1/R₃)</div>
+  <table style="margin-top:14px;max-width:520px">
+    <tr><th>Parallel help box</th><th>Behavior</th></tr>
+    <tr><td class="k">Voltage</td><td style="color:var(--band-green)">Same</td></tr>
+    <tr><td class="k">Current</td><td style="color:var(--amber)">Adds</td></tr>
+    <tr><td class="k">Resistance</td><td style="color:var(--band-red)">Diminishes</td></tr>
+    <tr><td class="k">Power</td><td style="color:var(--amber)">Adds</td></tr>
+  </table>
+</section>
+
+<!-- 32 -->
+<section class="slide" data-sect="Memory Trick">
+  <div class="eyebrow">Lock it in</div>
+  <h2>The One-Line<br>Difference</h2>
+  <div class="cols-2" style="margin-top:24px">
+    <div class="card q" style="padding:26px">
+      <h4 style="font-size:24px">Series</h4>
+      <p style="font-size:17px;line-height:1.6"><strong>Amps stay the SAME.</strong><br>Everything else adds up.</p>
+      <p style="margin-top:14px;color:var(--dim);font-size:14.5px">One path means every electron passes through every load — so the current can't change. Each load takes a share of the voltage.</p>
+    </div>
+    <div class="card g" style="padding:26px">
+      <h4 style="font-size:24px">Parallel</h4>
+      <p style="font-size:17px;line-height:1.6"><strong>Volts stay the SAME.</strong><br>Everything else adds up — except resistance, which shrinks.</p>
+      <p style="margin-top:14px;color:var(--dim);font-size:14.5px">Every branch connects to the same two points, so every branch sees full voltage. More branches = more paths = less total resistance.</p>
+    </div>
+  </div>
+  <div class="flag">Power <b>always adds</b> in both circuit types. If you only remember one thing, remember which quantity stays constant — the rest follows.</div>
+</section>
+
+<!-- 33 divider -->
+<section class="slide divider" data-sect="Part 6 — Wire &amp; Voltage Drop">
+  <div class="no">PART 06</div>
+  <h1>Wire Sizing &amp;<br>Voltage Drop</h1>
+  <p class="lede">AWG, Kcmil, circular mils, and the two formulas that show up on every test in this section.</p>
+  <div class="bars">
+    <i style="background:var(--band-orange)"></i><i style="background:var(--band-brown)"></i><i style="background:var(--band-gray)"></i><i style="background:var(--amber)"></i>
+  </div>
+</section>
+
+<!-- 34 -->
+<section class="slide" data-sect="AWG &amp; Kcmil">
+  <div class="eyebrow">Wire sizing</div>
+  <h2>AWG &amp; Kcmil</h2>
+  <div class="cols-2" style="margin-top:16px">
+    <div>
+      <h3>AWG — American Wire Gauge</h3>
+      <ul class="list">
+        <li>The standard U.S. sizing system for electrical conductors.</li>
+        <li>Runs from <strong>36 AWG</strong> (thinnest) to <strong>0000 / 4-0 AWG</strong> (thickest). Above that you switch to Kcmil.</li>
+        <li><strong>Smaller diameter = more resistance.</strong> Using a smaller wire in a series circuit increases total circuit resistance, which limits current flow.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Kcmil — Thousand Circular Mils</h3>
+      <ul class="list">
+        <li>Measures the <strong>cross-sectional area</strong> of a wire, not just its diameter.</li>
+        <li><strong>1 mil = 0.001 inches.</strong> A circular mil is the area of a circle one mil across.</li>
+        <li><strong>1 Kcmil = 1,000 circular mils.</strong></li>
+        <li>Higher Kcmil = larger area = more current-carrying capacity. A 1/0 AWG wire is <strong>53,480 cmil</strong>.</li>
+      </ul>
+    </div>
+  </div>
+  <h3 style="margin-top:28px">Converting diameter to Kcmil</h3>
+  <div class="calc">
+    Wire diameter = 0.5 inches<br>
+    <b>1.</b> 0.5 × 1,000 = <b>500 mils</b><br>
+    <b>2.</b> 500² = <b>250,000 circular mils</b><br>
+    <b>3.</b> 250,000 ÷ 1,000 = <b>250 Kcmil</b>
+  </div>
+</section>
+
+<!-- 35 -->
+<section class="slide" data-sect="Voltage Drop">
+  <div class="eyebrow">Formula</div>
+  <h2>Voltage Drop</h2>
+  <p>Resistance in a conductor causes voltage drop. That unwanted heat loss in conductors and loads is called <strong>I²R loss</strong>. Resistance depends on the circular mil area, the length, the material, and the temperature — and is <strong>inversely proportional</strong> to cross-sectional area.</p>
+  <div class="formula">VD = 2 (K × L × I) ÷ CM</div>
+  <table style="max-width:640px">
+    <tr><td class="k">K</td><td>Conductor material factor — <strong>copper ≈ 10.4</strong>, <strong>aluminum ≈ 2.4</strong></td></tr>
+    <tr><td class="k">L</td><td>Length in feet (one-way distance to the load)</td></tr>
+    <tr><td class="k">I</td><td>Amperage applied</td></tr>
+    <tr><td class="k">CM</td><td>Circular mils — the wire's cross-sectional area</td></tr>
+  </table>
+</section>
+
+<!-- 36 -->
+<section class="slide" data-sect="Voltage Drop Examples">
+  <div class="eyebrow">Worked problems</div>
+  <h2>Voltage Drop<br>in Practice</h2>
+  <h3 style="margin-top:22px">Copper</h3>
+  <p style="font-size:15px">24-volt circuit · #4 AWG copper (41,740 cmil) · 5,000 mA (5 A) load · 300 ft from source · K = 10.4</p>
+  <div class="calc">
+    VD = 2 (10.4 × 300 × 5) ÷ 41,740<br>
+    VD = 2 (15,600) ÷ 41,740<br>
+    VD = 31,200 ÷ 41,740<br>
+    VD = <b>0.74 volts</b>
+  </div>
+  <h3 style="margin-top:28px">Aluminum</h3>
+  <p style="font-size:15px">4,160-volt circuit · 1000 Kcmil aluminum · 30 A load · 1,000 ft from source · K = 2.4</p>
+  <div class="calc">
+    VD = 2 (2.4 × 1,000 × 30) ÷ 1,000,000<br>
+    VD = 2 (72,000) ÷ 1,000,000<br>
+    VD = 144,000 ÷ 1,000,000<br>
+    VD = <b>0.144 volts</b>
+  </div>
+</section>
+
+<!-- 37 -->
+<section class="slide" data-sect="Resistance Formula">
+  <div class="eyebrow">Formula</div>
+  <h2>Conductor Resistance</h2>
+  <div class="formula">R = (K × L) ÷ A</div>
+  <table style="max-width:640px">
+    <tr><td class="k">R</td><td>Resistance in ohms</td></tr>
+    <tr><td class="k">K</td><td>K-value — the conductor's ability to carry current, based on material, size, and temperature</td></tr>
+    <tr><td class="k">L</td><td>Length in feet</td></tr>
+    <tr><td class="k">A</td><td>Area in circular mils</td></tr>
+  </table>
+  <h3 style="margin-top:28px">Worked example</h3>
+  <p style="font-size:15px">Aluminum wire · 22,000 circular mils · one mile long · K = 5.9</p>
+  <div class="calc">
+    1 mile = <b>5,280 feet</b><br>
+    R = (5.9 × 5,280) ÷ 22,000<br>
+    R = 31,152 ÷ 22,000<br>
+    R = <b>1.416 ohms</b>
+  </div>
+</section>
+
+<!-- 38 -->
+<section class="slide" data-sect="Final Recap">
+  <div class="eyebrow">Before the test</div>
+  <h2>The Short List</h2>
+  <ol class="steps" style="margin-top:20px">
+    <li><strong>75% passing average</strong>, closed-book tests every 3–4 weeks, always show your work.</li>
+    <li><strong>Color code order:</strong> Black · Brown · Red · Orange · Yellow · Green · Blue · Violet · Gray · White = 0 through 9.</li>
+    <li><strong>Series</strong> = amps stay the same. <strong>Parallel</strong> = volts stay the same. Power adds in both.</li>
+    <li><strong>Ohm's Law core:</strong> E = I×R · I = E÷R · R = E÷I · P = E×I</li>
+    <li><strong>Voltage drop:</strong> VD = 2(KLI) ÷ CM &nbsp;·&nbsp; <strong>Resistance:</strong> R = (K×L) ÷ A</li>
+    <li><strong>Dates:</strong> 1891 IBEW convention · 1901 NECA founded · 1920 CIR · 1941 NJATC · 1946 NEBF · 2014 electrical training ALLIANCE.</li>
+  </ol>
+  <div class="flag" style="margin-top:26px">Study a little every day. Underline what you can't explain in your own words yet — that's your homework list.</div>
+</section>
+
+</main>
+
+<section class="cards-view" id="cardsView">
+  <div class="filters" id="filters"></div>
+
+  <div class="card-area">
+    <div class="flip" id="flip" role="button" tabindex="0" aria-label="Flip card">
+      <div class="flip-inner">
+        <div class="face face-front">
+          <div class="face-label"><i id="dotF"></i><span id="catF">Category</span></div>
+          <div class="face-text" id="frontText">Loading…</div>
+          <div class="face-cue">Click or press F to reveal the answer</div>
+        </div>
+        <div class="face face-back">
+          <div class="face-label"><i id="dotB"></i><span id="catB">Answer</span></div>
+          <div class="face-text" id="backText"></div>
+          <div class="face-cue">Press G if you got it · R to review again</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="done-panel" id="donePanel">
+      <h3>Deck complete</h3>
+      <p id="doneMsg">You worked through every card in this set.</p>
+      <div class="row">
+        <button class="btn" id="againAll">Restart deck</button>
+        <button class="btn" id="againMissed">Drill the missed cards</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-bar">
+    <button class="btn" id="cPrev">Prev</button>
+    <button class="btn" id="cFlip">Flip</button>
+    <button class="btn" id="cNext">Next</button>
+    <button class="btn-mark again" id="cAgain">Review again</button>
+    <button class="btn-mark good" id="cGood">Got it</button>
+    <div class="spacer"></div>
+    <button class="btn" id="cShuffle">Shuffle</button>
+    <div class="card-stats">
+      <span>CARD <b id="cIdx">1</b> / <b id="cTot">0</b></span>
+      <span class="ok">GOT IT <b id="cOk">0</b></span>
+      <span class="no">REVIEW <b id="cNo">0</b></span>
+    </div>
+  </div>
+  <div class="meter"><i id="cMeter"></i></div>
+</section>
+
+<nav class="bar">
+  <button class="btn" id="prev" aria-label="Previous slide">Prev</button>
+  <div class="bands" id="bands"></div>
+  <button class="btn" id="next" aria-label="Next slide">Next</button>
+  <div class="count"><b id="cur">1</b> / <span id="tot">38</span></div>
+</nav>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bands=document.getElementById('bands');
+  var cur=document.getElementById('cur');
+  var tot=document.getElementById('tot');
+  var railSect=document.getElementById('railSect');
+  var railNum=document.getElementById('railNum');
+  var prev=document.getElementById('prev');
+  var next=document.getElementById('next');
+  var stage=document.getElementById('stage');
+  var i=0;
+
+  var palette=['#7b4a25','#d0342c','#e8752a','#f2c53d','#3f9e5c','#2f6fbf','#8a5cc4','#8c9aa5','#ffb020','#eef4f8'];
+
+  tot.textContent=slides.length;
+  var meta=document.getElementById('totalMeta');
+  if(meta) meta.textContent=slides.length;
+
+  slides.forEach(function(s,n){
+    var b=document.createElement('i');
+    b.title='Slide '+(n+1)+' — '+(s.dataset.sect||'');
+    b.addEventListener('click',function(){go(n)});
+    bands.appendChild(b);
+  });
+  var marks=[].slice.call(bands.children);
+
+  function go(n){
+    if(n<0||n>=slides.length) return;
+    slides[i].classList.remove('on');
+    i=n;
+    slides[i].classList.add('on');
+    stage.scrollTop=0;
+    cur.textContent=i+1;
+    railNum.textContent=String(i+1).padStart(2,'0');
+    railSect.textContent=slides[i].dataset.sect||'';
+    marks.forEach(function(m,n2){
+      if(n2<=i){m.style.background=palette[n2%palette.length];m.classList.add('done')}
+      else{m.style.background='rgba(255,255,255,.09)';m.classList.remove('done')}
+    });
+    prev.disabled=(i===0);
+    next.disabled=(i===slides.length-1);
+  }
+
+  prev.addEventListener('click',function(){go(i-1)});
+  next.addEventListener('click',function(){go(i+1)});
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}
+    if(e.key==='Home'){e.preventDefault();go(0)}
+    if(e.key==='End'){e.preventDefault();go(slides.length-1)}
+  });
+
+  var x0=null,y0=null;
+  stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  stage.addEventListener('touchend',function(e){
+    if(x0===null) return;
+    var dx=e.changedTouches[0].clientX-x0;
+    var dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)) go(dx<0?i+1:i-1);
+    x0=null;y0=null;
+  },{passive:true});
+
+  go(0);
+
+  window.__deckNav = go;
+})();
+
+/* ---------- flashcard engine ---------- */
+(function(){
+  var DATA = {"categories":[{"id":"program","name":"Program & Testing","color":"#ffb020"},{"id":"prof","name":"Apprenticeship & Professionalism","color":"#3f9e5c"},{"id":"history","name":"IBEW & NECA History","color":"#2f6fbf"},{"id":"safety","name":"Drug, Alcohol & Harassment","color":"#d0342c"},{"id":"fund","name":"Electricity Fundamentals","color":"#8a5cc4"},{"id":"math","name":"Math & Calculator","color":"#e8752a"},{"id":"resistor","name":"Resistors","color":"#f2c53d"},{"id":"ohms","name":"Ohm's Law","color":"#7b4a25"},{"id":"circuits","name":"Series & Parallel Circuits","color":"#4fb8d9"},{"id":"wire","name":"Wire Sizing & Voltage Drop","color":"#8c9aa5"}],"cards":[{"id":1,"cat":"program","front":"What average must you maintain to pass this course?","back":"75% — many students score in the 80s."},{"id":2,"cat":"program","front":"How often are tests given, and are they open or closed book?","back":"Every 3–4 weeks, and they are closed-book."},{"id":3,"cat":"program","front":"What four question formats appear on the tests?","back":"True/false, multiple choice, fill-in-the-blank, and math problems."},{"id":4,"cat":"program","front":"On a multi-part test question, how much must be correct to earn credit?","back":"Every part. If one part is wrong, you get no credit for the question."},{"id":5,"cat":"program","front":"What must you do on every math problem to receive credit?","back":"Show your work."},{"id":6,"cat":"program","front":"How much time should you spend studying outside of class?","back":"Equal time to what you spend in class."},{"id":7,"cat":"program","front":"List the six steps of the study method.","back":"1) Read the introductory info. 2) Study the learning objectives. 3) Review the lesson questions. 4) Study the references. 5) Answer the questions. 6) Do a final review before class."},{"id":8,"cat":"program","front":"How do you know if you truly studied a reference paragraph?","back":"If you can explain it in your own words. If you can't, you haven't truly studied it."},{"id":9,"cat":"program","front":"Is it better to study a little each day or cram all at once?","back":"A little each day. Cramming is far less effective."},{"id":10,"cat":"program","front":"What is the instructor's role?","back":"To guide class discussions, answer questions, and demonstrate electrical principles — but they cannot study or learn for you."},{"id":11,"cat":"program","front":"What should you do if you're struggling with a lesson?","back":"Study it more and write down specific questions. A clear question helps you and the whole class."},{"id":12,"cat":"program","front":"What happens if you don't put in the necessary effort?","back":"The Committee may remove you from the program, and you won't have job opportunities in the industry."},{"id":13,"cat":"program","front":"What academic background does the course assume?","back":"Completed high school with some science and algebra knowledge. If not, take an online math course."},{"id":14,"cat":"prof","front":"How long is the apprenticeship and how many hours?","back":"Approximately three and a half years, roughly 5,000 hours of combined on-the-job and classroom training."},{"id":15,"cat":"prof","front":"What four key traits does the AJATC look for when selecting apprentices?","back":"Responsibility, Aptitude, Motivation, and Personality."},{"id":16,"cat":"prof","front":"Define the trait 'Responsibility' for an apprentice.","back":"You are expected to meet deadlines, follow rules, and honor what you agreed to when you signed your apprenticeship contract."},{"id":17,"cat":"prof","front":"Define the trait 'Aptitude' for an apprentice.","back":"You have the ability to learn the trade — both the classroom theory and the hands-on work."},{"id":18,"cat":"prof","front":"Define the trait 'Motivation' for an apprentice.","back":"You must have genuine interest in the trade. Your motivation shows through your attendance and attitude."},{"id":19,"cat":"prof","front":"Define the trait 'Personality' for an apprentice.","back":"The AJATC saw potential in you to work well with others and represent the industry positively."},{"id":20,"cat":"prof","front":"What two things does the AJATC monitor to ensure quality training?","back":"Consistency and punctuality — plus a strong work ethic. Those who don't demonstrate them may be removed from the program."},{"id":21,"cat":"prof","front":"What is a QEW?","back":"A Qualified Electrical Worker — expected to maintain the same high standards of conduct and responsibility as doctors or lawyers."},{"id":22,"cat":"prof","front":"What is the first step to professionalism?","back":"Recognizing your role within the organization and how it impacts the company's relations and success."},{"id":23,"cat":"prof","front":"Name six key traits of a professional worker.","back":"Responsible and proactive; timely and reliable; honest with integrity; service-minded and team-oriented; good communicator who keeps confidentiality; respects the public and the employer."},{"id":24,"cat":"prof","front":"List the benefits of being an IBEW member.","back":"Better training, higher wages, better benefits, more job security, greater democracy, better health and safety, collective bargaining, and greater equity in pay."},{"id":25,"cat":"prof","front":"What percentage of accidents happen when crews are merged due to absenteeism?","back":"60% of accidents, from minor to fatal."},{"id":26,"cat":"prof","front":"Break down the daily cost of one worker's absence.","back":"$200 lost wages + $110 benefits + $600 equipment and crew reassignment = $910 per day."},{"id":27,"cat":"prof","front":"What is the monthly and yearly cost of absenteeism for one worker (8 days out per month)?","back":"Monthly: $7,280. Yearly: $87,360."},{"id":28,"cat":"prof","front":"In the absenteeism study, which factors showed NO link to absenteeism?","back":"Pay satisfaction, how workers felt about the company, and feeling overworked."},{"id":29,"cat":"prof","front":"Which two factors DID correlate with absenteeism?","back":"Poor physical working conditions (heat, maintenance, safety), and whether the worker saw themself as a professional. Those who felt replaceable had the highest rates."},{"id":30,"cat":"prof","front":"How many workers and companies were in the absenteeism study?","back":"1,000 workers across 13 companies."},{"id":31,"cat":"prof","front":"What is the root cause identified in the absenteeism case study?","back":"The foreman's absence caused a lack of proper leadership and safety precautions — a replacement foreman made poor safety decisions and a worker was injured and off work for 13 months."},{"id":32,"cat":"prof","front":"What percentage of U.S. workers are employed in construction, and how much is the industry set to grow?","back":"5% of U.S. workers. The industry was set to grow nearly 10% annually through 2016, employing 11% of the workforce."},{"id":33,"cat":"prof","front":"What did Calvin Coolidge famously say about construction?","back":"That the business of America is business — but if he were more talkative he might have added that America's biggest business is construction."},{"id":34,"cat":"history","front":"When and where was the first IBEW Convention held?","back":"November 21, 1891, in St. Louis."},{"id":35,"cat":"history","front":"What was considered a good hourly wage in 1890?","back":"15 to 20 cents per hour."},{"id":36,"cat":"history","front":"Who was J.T. Kelly and what happened in 1892?","back":"J.T. Kelly stepped down as Grand Secretary in 1892."},{"id":37,"cat":"history","front":"When and where was NECA founded?","back":"1901, at the Pan-American Exposition in Buffalo, NY."},{"id":38,"cat":"history","front":"What does NECA stand for and who does it represent?","back":"National Electrical Contractors Association — it represents the electrical contracting industry (the contractors/businesses)."},{"id":39,"cat":"history","front":"How is NECA organized geographically?","back":"Nine geographic districts, plus one district with jurisdiction over outside line construction."},{"id":40,"cat":"history","front":"Who were the two early leaders that brought about the industry's first National Labor Agreement?","back":"Charles Ford and L.K. Comstock."},{"id":41,"cat":"history","front":"What was the state of strikes in 1920?","back":"Strikes were rampant — the IBEW had as many as 200 local strikes at one time."},{"id":42,"cat":"history","front":"What is the CIR and when was it formed?","back":"The Council on Industrial Relations, formed in 1920 by the IBEW and NECA. It's an arbitration panel that resolves disputes and gives the industry a reputation for stability."},{"id":43,"cat":"history","front":"What was NECA's membership goal in 1920?","back":"To grow to 2,000 members."},{"id":44,"cat":"history","front":"What happened in 1924 within the IBEW?","back":"The IBEW Research Department was established."},{"id":45,"cat":"history","front":"What happened in 1938 within the IBEW?","back":"The Labor Relations Department was created."},{"id":46,"cat":"history","front":"When did the IBEW establish a pension fund, and what did it become?","back":"1928. It was later expanded in 1946 into the National Electrical Benefit Fund (NEBF)."},{"id":47,"cat":"history","front":"How is the NEBF funded and where is it headquartered?","back":"Funded initially by employer contributions of a percentage of gross payroll. NECA is headquartered in Bethesda, MD."},{"id":48,"cat":"history","front":"What was IBEW membership in 1966?","back":"Nearly 870,000 members."},{"id":49,"cat":"history","front":"What is the National Joint Apprenticeship and Training Committee, and when was it formed?","back":"The NJATC, formed August 14, 1941, to develop education and training programs for the electrical industry."},{"id":50,"cat":"history","front":"What was the NJASC and how was it composed?","back":"The National Joint Apprenticeship Standards Committee, formed in 1941 with 12 representatives — 6 from the IBEW and 6 from NECA. It introduced the industry's first National Training Standards."},{"id":51,"cat":"history","front":"What happened in 1953 with the NJATC?","back":"It set six primary objectives, including creating national standards, promoting local joint committees, and developing curricula. The National office was founded."},{"id":52,"cat":"history","front":"When was the first Inside Wireman course introduced?","back":"1961."},{"id":53,"cat":"history","front":"What lengths were set for Inside and Outside apprenticeships in 1969?","back":"Inside was reduced to four years; Outside was set at three years. A two-year Residential program was in development."},{"id":54,"cat":"history","front":"What was launched in 1990 and why?","back":"The National Training Institute (NTI), in collaboration with a university, to improve instructor training, curriculum, and technological awareness."},{"id":55,"cat":"history","front":"How did apprentices become eligible for college credit?","back":"In the 1990s, through the American Council on Education (ACE), for completing the national apprenticeship program."},{"id":56,"cat":"history","front":"What did the NJATC become in 2014, and why?","back":"The electrical training ALLIANCE — to better reflect modern training needs and partnerships with universities, community colleges, and industry partners."},{"id":57,"cat":"history","front":"How many IBEW members serve as instructors today?","back":"Over 4,000."},{"id":58,"cat":"history","front":"List the IBEW's core objectives.","back":"Assist others in sickness and distress; cultivate friendship in the industry; organize all workers in the electrical industry; secure adequate pay; secure employment; seek security for the individual."},{"id":59,"cat":"history","front":"By what time must a Local Union adjourn its meetings?","back":"Not later than 11:00 PM."},{"id":60,"cat":"history","front":"How often can a Local Union meet without declaring a special call?","back":"Two times a month."},{"id":61,"cat":"history","front":"How many months of owed dues makes a member ineligible for pension and death benefits?","back":"6 months."},{"id":62,"cat":"history","front":"How many months of owed dues risks having your membership suspended?","back":"3 months."},{"id":63,"cat":"history","front":"What is required to be eligible to hold office in the IBEW?","back":"5 years of continuous good standing in the IBEW immediately prior to nomination."},{"id":64,"cat":"history","front":"When are nominations for officers held, and how often does the International Convention meet?","back":"Nominations are held in May of election years. The International Convention meets every five years."},{"id":65,"cat":"history","front":"How is money collected by the IBEW divided?","back":"Between the General Fund and the Pension Fund."},{"id":66,"cat":"safety","front":"What law does sexual harassment violate?","back":"Title VII of the Civil Rights Act of 1964."},{"id":67,"cat":"safety","front":"What are the two basic types of unlawful sexual harassment?","back":"Quid pro quo and hostile work environment."},{"id":68,"cat":"safety","front":"Does harassment have to be sexual in nature?","back":"No. It can include inappropriate job assignments based on gender."},{"id":69,"cat":"safety","front":"What is the best tool to eliminate sexual harassment in the workplace?","back":"Prevention."},{"id":70,"cat":"safety","front":"How does the EEOC evaluate a harassment allegation?","back":"It looks at the whole record, including the circumstances and the context in which the alleged incidents occurred, on a case-by-case basis."},{"id":71,"cat":"safety","front":"What should you do if you are a victim or witness of harassment?","back":"Report it to the proper company official immediately. Confidentiality is crucial, whether you are the accused, the complainant, or a witness."},{"id":72,"cat":"safety","front":"What makes behavior sexual harassment?","back":"If the recipient considers it offensive or unwanted, it is considered unwelcome behavior — something as little as commenting on a coworker's physical appearance may count."},{"id":73,"cat":"safety","front":"Name the three categories of drugs covered in Lesson 8.","back":"Legal drugs (alcohol, prescription meds), illegal drugs (marijuana, cocaine, heroin, PCP), and prescription drugs (legal when prescribed, addictive when misused)."},{"id":74,"cat":"safety","front":"Which drugs are commonly called 'gateway' drugs?","back":"Alcohol, tobacco, and marijuana."},{"id":75,"cat":"safety","front":"What are the four stages of alcohol and drug use?","back":"1) Experimentation. 2) Regular Use. 3) Preoccupation and Daily Use. 4) Dependence and Severe Effects."},{"id":76,"cat":"safety","front":"Describe Stage 1 — Experimentation.","back":"Individuals, especially youth, experiment with drugs like alcohol and tobacco, usually seeking the euphoric effects. No obvious behavioral changes yet."},{"id":77,"cat":"safety","front":"Describe Stage 3 — Preoccupation and Daily Use.","back":"The desire for the drug becomes overwhelming, with daily use, declining school or work performance, and a lack of motivation."},{"id":78,"cat":"safety","front":"Describe Stage 4 — Dependence and Severe Effects.","back":"Increased drug use leads to physical and mental deterioration — weight loss, fatigue, blackouts, depression, family issues, legal troubles, and possible overdose."},{"id":79,"cat":"safety","front":"Name the warning signs of drug use.","back":"Mood swings, declining performance at school or work, bloodshot eyes, unexplained weight loss, frequent intoxication, driving under the influence, and using alcohol to cope with problems."},{"id":80,"cat":"safety","front":"What are the effects of alcohol?","back":"A mind-altering drug leading to physical and psychological issues. Chronic use may cause liver disease, brain damage, and accidents."},{"id":81,"cat":"safety","front":"What are the effects of marijuana?","back":"Though often seen as harmless, it can damage lungs, impair memory and judgment, affect brain development in youth, and carries risks for heart problems and reproductive health."},{"id":82,"cat":"safety","front":"What are the effects of cocaine?","back":"Highly addictive and dangerous — induces severe cravings and can lead to heart problems, seizures, and overdose."},{"id":83,"cat":"safety","front":"What are the effects of heroin?","back":"An addictive opiate causing severe physical dependence. Heroin use can be life-threatening, and needle sharing spreads diseases like AIDS."},{"id":84,"cat":"safety","front":"What are the effects of PCP?","back":"Known for distorting reality and impairing judgment, making it easy to become addicted. It can cause aggression and long-term cognitive issues."},{"id":85,"cat":"safety","front":"What is the first step in helping someone with a drug or alcohol problem?","back":"Acknowledging the issue. Then be understanding, firm, and supportive — seek support from treatment groups or family and avoid enabling destructive behaviors."},{"id":86,"cat":"safety","front":"What group is recommended for families of individuals struggling with alcohol abuse?","back":"Al-Anon — it can connect you with local resources."},{"id":87,"cat":"fund","front":"What is electricity?","back":"A form of energy resulting from the movement of electrons (tiny charged particles) through a conductor."},{"id":88,"cat":"fund","front":"What are the two main forms of electricity?","back":"Static electricity and current electricity."},{"id":89,"cat":"fund","front":"What is static electricity?","back":"When electrons build up on a surface and create an imbalance of charge — like when your hair stands up after taking off a hat."},{"id":90,"cat":"fund","front":"What is current electricity?","back":"The continuous flow of electrons through a conductor, used to power devices and systems."},{"id":91,"cat":"fund","front":"What is the difference between DC and AC?","back":"DC (Direct Current) — electrons flow in one direction. AC (Alternating Current) — electrons reverse direction periodically."},{"id":92,"cat":"fund","front":"What is a magnetic field?","back":"An invisible field created by a magnet that exerts a force on magnetic materials like iron."},{"id":93,"cat":"fund","front":"What is electromagnetic induction?","back":"Generating electric current by moving a conductor through a magnetic field, or by spinning a magnetic field near a coil of wire. It's the most common method of producing electricity."},{"id":94,"cat":"fund","front":"How do power plants generate electricity?","back":"By turning turbines with steam, wind, or water to spin a magnetic field inside a coil of wire — the faster the wire moves through the field, the more electricity is produced."},{"id":95,"cat":"fund","front":"What is thermoelectricity?","back":"The generation of electricity from heat differences. Heat one side of a special material and keep the other cool — electrons move from hot to cold, creating current."},{"id":96,"cat":"fund","front":"What is the Peltier effect used for?","back":"Thermoelectric cooling systems — the reverse of thermoelectric generation. Used in portable coolers and devices that transfer heat."},{"id":97,"cat":"fund","front":"What is piezoelectricity?","back":"An electrical charge produced by pressure — the ability of certain materials like quartz to generate electricity when stretched or compressed."},{"id":98,"cat":"fund","front":"Give two examples of piezoelectricity.","back":"The spark you get when clicking a lighter, and sensors that detect pressure or vibration (microphones, phone touch screens)."},{"id":99,"cat":"fund","front":"How does a battery work?","back":"It converts chemical energy into electrical energy through a chemical reaction, creating a flow of electrons that powers a device."},{"id":100,"cat":"fund","front":"What is the anode in a battery?","back":"The negative side — it releases electrons."},{"id":101,"cat":"fund","front":"What is the cathode in a battery?","back":"The positive side — it accepts electrons."},{"id":102,"cat":"fund","front":"What is the electrolyte in a battery?","back":"A special liquid or paste that allows charged particles (ions) to move between the anode and cathode, keeping the reaction going."},{"id":103,"cat":"fund","front":"Are an electrolyte battery and a lead-acid battery the same thing?","back":"Yes."},{"id":104,"cat":"fund","front":"What is a primary cell battery?","back":"Non-rechargeable, single-use. Once its energy is used up it must be disposed of. Examples: AA, AAA, button cells in watches and hearing aids."},{"id":105,"cat":"fund","front":"What is a secondary cell battery?","back":"Rechargeable and reusable — more economical and environmentally friendly. Examples: Lithium-ion, Nickel-metal hydride (NiMH), and Lead-acid."},{"id":106,"cat":"fund","front":"What happens when you connect a copper wire to a battery?","back":"The electric field pushes free electrons away from the negative terminal and pulls them toward the positive. Electrons move atom to atom, creating the flow of charge we call electricity. Heat is produced from the current flowing through it."},{"id":107,"cat":"fund","front":"What is a schematic?","back":"An electrical drawing that depicts the systematic way current will flow through a complete circuit."},{"id":108,"cat":"fund","front":"What is a complete circuit?","back":"A circuit that allows current to flow to the intended destination through the load and back to the source."},{"id":109,"cat":"fund","front":"What happens as an incandescent lamp filament's resistance increases?","back":"Its wattage rating decreases. Incandescent lamps use poor conductors that become hot from conducting current and glow red or even white hot."},{"id":110,"cat":"fund","front":"What is a switch?","back":"A mechanical device designed to allow or interrupt current flow in a circuit."},{"id":111,"cat":"fund","front":"What does it mean when a switch is in the closed position?","back":"The circuit is complete and the switch is ON — current flows."},{"id":112,"cat":"fund","front":"What is an open circuit?","back":"When the switch separates the terminals of the source so electrons (current) can't flow."},{"id":113,"cat":"fund","front":"Does the location of the switch in a circuit matter?","back":"No. All it has to do is separate the terminals of the battery so the electrons can't flow."},{"id":114,"cat":"fund","front":"How is a switch rated?","back":"By its maximum current and maximum voltage."},{"id":115,"cat":"math","front":"How do you convert a decimal to a fraction?","back":"Put the decimal over its place value and reduce. Example: 0.6 = 6/10 = 3/5."},{"id":116,"cat":"math","front":"How do you convert a fraction to a decimal?","back":"Divide the numerator by the denominator. Example: 1/3 = 0.333."},{"id":117,"cat":"math","front":"How do you convert an improper fraction to a mixed number?","back":"Divide the numerator by the denominator; the remainder becomes the new numerator. Example: 22/7 = 3 1/7."},{"id":118,"cat":"math","front":"How do you convert a mixed number to an improper fraction?","back":"Multiply the whole number by the denominator, add the numerator, and keep the same denominator. Example: 4 3/4 = 19/4."},{"id":119,"cat":"math","front":"What is the basic percentage relationship?","back":"Part = Whole × Percent. Know any two values and you can solve for the third. Example: 22.5 is 15% of 150."},{"id":120,"cat":"math","front":"Convert 0.125 and 11/16 .","back":"0.125 = 1/8. 11/16 = 0.6875."},{"id":121,"cat":"math","front":"On a TI-30X IIS, how do you convert a mixed number to an improper fraction?","back":"Enter the whole number, press A b/c, enter numerator, press A b/c, enter denominator, press =, then 2nd + A b/c. Example: 4 3/4 = 19/4."},{"id":122,"cat":"math","front":"On a TI-30X IIS, how do you convert a decimal into a fraction?","back":"Type the decimal, then press 2nd followed by PRB (the F↔D function). Example: .33333333 = 1/3."},{"id":123,"cat":"math","front":"On a TI-30X IIS, how do you add fractions?","back":"Numerator, A b/c, denominator, then +, then the next fraction the same way, then =. Example: 3/4 + 1/4 = 1."},{"id":124,"cat":"resistor","front":"What is a resistor?","back":"An electrical component that limits or regulates the flow of electrical current in an electronic circuit."},{"id":125,"cat":"resistor","front":"In what direction do you read resistor color bands?","back":"Left to right."},{"id":126,"cat":"resistor","front":"What do the bands mean on a 4-band resistor?","back":"1st Band = first digit, 2nd Band = second digit, 3rd Band = multiplier, 4th Band = tolerance."},{"id":127,"cat":"resistor","front":"What do the bands mean on a 5-band resistor?","back":"Three digit bands, then a multiplier band, then a tolerance band."},{"id":128,"cat":"resistor","front":"List the resistor color code digits 0 through 9 in order.","back":"Black 0, Brown 1, Red 2, Orange 3, Yellow 4, Green 5, Blue 6, Violet 7, Gray 8, White 9."},{"id":129,"cat":"resistor","front":"What tolerance does a Brown band indicate?","back":"±1%."},{"id":130,"cat":"resistor","front":"What tolerance does a Red band indicate?","back":"±2%."},{"id":131,"cat":"resistor","front":"What tolerance does a Gold band indicate?","back":"±5%."},{"id":132,"cat":"resistor","front":"What tolerance does a Silver band indicate?","back":"±10%."},{"id":133,"cat":"resistor","front":"A resistor has only three color bands. What is its tolerance?","back":"±20%. A 4-band resistor with no color in the fourth position is considered a '3-band resistor,' and the default tolerance is 20%."},{"id":134,"cat":"resistor","front":"What is the value of a resistor with Red-Red-Orange bands?","back":"Red = 2, Red = 2, Orange = ×1,000 multiplier. 22 × 1,000 = 22,000 ohms (22 kΩ)."},{"id":135,"cat":"resistor","front":"What is the acceptable range for a resistor with Orange-Black-Green-Silver bands?","back":"Orange 3, Black 0, Green ×100,000, Silver ±10%. 30 × 100,000 = 3,000,000 ohms; ±10% = ±300,000. Range: 2,700,000 to 3,300,000 ohms."},{"id":136,"cat":"resistor","front":"What is a variable resistor (rheostat)?","back":"A resistor that uses 2 leads and has a moveable contact adjusted by turning a shaft or stem (a knob), letting you change the resistance value."},{"id":137,"cat":"resistor","front":"Name four resistor types shown in the guide.","back":"Fixed resistor, adjustable resistor, tapped resistor, and variable resistor."},{"id":138,"cat":"ohms","front":"What does E stand for in Ohm's Law?","back":"Electromotive Force — also called Potential or Voltage. Measured in Volts."},{"id":139,"cat":"ohms","front":"What does I stand for in Ohm's Law?","back":"Current. Measured in Amps."},{"id":140,"cat":"ohms","front":"What does R stand for in Ohm's Law?","back":"Resistance. Measured in Ohms."},{"id":141,"cat":"ohms","front":"What does P stand for in Ohm's Law?","back":"Power. Measured in Watts."},{"id":142,"cat":"ohms","front":"Give the three formulas for finding E (Volts).","back":"E = I × R, E = P ÷ I, E = √(P × R)."},{"id":143,"cat":"ohms","front":"Give the three formulas for finding I (Amps).","back":"I = E ÷ R, I = P ÷ E, I = √(P ÷ R)."},{"id":144,"cat":"ohms","front":"Give the three formulas for finding R (Ohms).","back":"R = E ÷ I, R = E² ÷ P, R = P ÷ I²."},{"id":145,"cat":"ohms","front":"Give the three formulas for finding P (Watts).","back":"P = E × I, P = E² ÷ R, P = I² × R."},{"id":146,"cat":"ohms","front":"An alarm clock draws 0.5 amps at 120 volts. How much resistance?","back":"R = E ÷ I = 120 ÷ 0.5 = 240 ohms."},{"id":147,"cat":"ohms","front":"A subwoofer uses 110 volts to push 5.5 amps. How much resistance?","back":"R = E ÷ I = 110 ÷ 5.5 = 20 ohms."},{"id":148,"cat":"ohms","front":"A circuit has a 1.5-volt battery and a bulb with 3 ohms of resistance. How many amps?","back":"I = E ÷ R = 1.5 ÷ 3 = 0.5 amps."},{"id":149,"cat":"ohms","front":"A light has 10 ohms of resistance and pushes 1.2 amps. How much voltage does it need?","back":"E = I × R = 1.2 × 10 = 12 volts."},{"id":150,"cat":"ohms","front":"How many watts in a coffee maker connected to 120 volts with 20 ohms of resistance?","back":"P = E² ÷ R = 14,400 ÷ 20 = 720 watts."},{"id":151,"cat":"circuits","front":"How many paths for current does a series circuit have?","back":"Only ONE path."},{"id":152,"cat":"circuits","front":"In a series circuit, what happens to voltage?","back":"It adds. E Total = E1 + E2 + E3 + E4..."},{"id":153,"cat":"circuits","front":"In a series circuit, what happens to current?","back":"It stays the same throughout the circuit. I Total = I1 = I2 = I3..."},{"id":154,"cat":"circuits","front":"In a series circuit, what happens to resistance?","back":"It adds. R Total = R1 + R2 + R3 + R4..."},{"id":155,"cat":"circuits","front":"In a series circuit, what happens to power?","back":"It adds. P Total = P1 + P2 + P3 + P4..."},{"id":156,"cat":"circuits","front":"How many paths for current does a parallel circuit have?","back":"MULTIPLE paths."},{"id":157,"cat":"circuits","front":"In a parallel circuit, what happens to voltage?","back":"It stays the same throughout. E Total = E1 = E2 = E3 = E4..."},{"id":158,"cat":"circuits","front":"In a parallel circuit, what happens to current?","back":"It adds. I Total = I1 + I2 + I3 + I4..."},{"id":159,"cat":"circuits","front":"In a parallel circuit, what happens to resistance?","back":"It diminishes — total resistance is always LESS than the smallest resistor value."},{"id":160,"cat":"circuits","front":"What is the formula for total resistance in a parallel circuit?","back":"R Total = 1 ÷ (1/R1 + 1/R2 + 1/R3)."},{"id":161,"cat":"circuits","front":"In a parallel circuit, what happens to power?","back":"It adds. P Total = P1 + P2 + P3 + P4..."},{"id":162,"cat":"circuits","front":"What's the fastest way to remember the difference between series and parallel?","back":"Series: amps stay the SAME, everything else adds. Parallel: volts stay the SAME, everything else adds — except resistance, which shrinks. Power always adds in both."},{"id":163,"cat":"wire","front":"What is AWG?","back":"American Wire Gauge — the system most commonly used in the United States to size electrical conductors."},{"id":164,"cat":"wire","front":"What is the range of AWG wire sizes?","back":"From 36 AWG up to 0000 (4/0). The next size up after that is KCMIL (thousand circular mils)."},{"id":165,"cat":"wire","front":"What happens when you use a smaller diameter wire in a series circuit?","back":"It increases the total resistance of the circuit. Current flow through a circuit is limited by resistance."},{"id":166,"cat":"wire","front":"What is a kcmil?","back":"A thousand circular mils — a unit of measurement describing the cross-sectional area of a wire, used especially in the U.S. for copper or aluminum conductors."},{"id":167,"cat":"wire","front":"What is a circular mil?","back":"The area of a circle with a diameter of one mil (one thousandth of an inch)."},{"id":168,"cat":"wire","front":"How many inches is 1 mil?","back":"1 mil = 0.001 inches."},{"id":169,"cat":"wire","front":"How many circular mils in 1 kcmil?","back":"1,000 circular mils."},{"id":170,"cat":"wire","front":"What is the cross-sectional area of a 1/0 AWG wire?","back":"53,480 kcmil."},{"id":171,"cat":"wire","front":"What does a higher kcmil number mean?","back":"A larger cross-sectional area, which typically means the wire can carry more electrical current."},{"id":172,"cat":"wire","front":"What are the three steps to convert wire diameter (inches) to kcmil?","back":"1) Convert diameter to mils: inches × 1,000. 2) Find area in circular mils: (diameter in mils)². 3) Convert to kcmil: circular mils ÷ 1,000."},{"id":173,"cat":"wire","front":"A wire has a diameter of 0.5 inches. What is its size in kcmil?","back":"0.5 × 1,000 = 500 mils. 500² = 250,000 circular mils. 250,000 ÷ 1,000 = 250 kcmil."},{"id":174,"cat":"wire","front":"What four factors affect the resistance of a conductor?","back":"The circular mil area, the length, the material it's made from, and the temperature."},{"id":175,"cat":"wire","front":"Resistance of a conductor is inversely proportional to what?","back":"Its cross-sectional area — bigger area means less resistance."},{"id":176,"cat":"wire","front":"What is I²R loss?","back":"The unwanted heat loss created in conductors and loads of a circuit due to resistance."},{"id":177,"cat":"wire","front":"What is the voltage drop formula?","back":"VD = 2 (K × L × I) ÷ CM — that is, 2 × (resistance per 1000 feet × footage × amperage applied) ÷ circular mils."},{"id":178,"cat":"wire","front":"What is the K value of copper?","back":"10.4"},{"id":179,"cat":"wire","front":"What is the K value of aluminum (voltage drop)?","back":"2.4"},{"id":180,"cat":"wire","front":"What does K represent in the voltage drop and resistance formulas?","back":"The K-value, or ampacity correction factor — the ability of the wire to conduct electricity based on its material (copper or aluminum), size, and temperature."},{"id":181,"cat":"wire","front":"Find the voltage drop: 24-volt circuit, #4 AWG copper (41,740 cmil), 5,000 mA load, 300 feet from source, K = 10.4.","back":"VD = 2 (10.4 × 300 × 5) ÷ 41,740 = 2 (15,600) ÷ 41,740 = 31,200 ÷ 41,740 = 0.74 volts."},{"id":182,"cat":"wire","front":"Find the voltage drop: 4160-volt circuit, 1000 kcmil aluminum, 30-amp load, 1,000 feet from source, K = 2.4.","back":"VD = 2 (2.4 × 1000 × 30) ÷ 1,000,000 = 2 (72,000) ÷ 1,000,000 = 144,000 ÷ 1,000,000 = 0.144 volts."},{"id":183,"cat":"wire","front":"What is the formula for the resistance of a conductor?","back":"R = (K × L) ÷ A, where L is length in feet and A is circular mils."},{"id":184,"cat":"wire","front":"How many feet are in a mile?","back":"5,280 feet."},{"id":185,"cat":"wire","front":"Calculate the resistance of aluminum wire with 22,000 circular mils, one mile long, K = 5.9.","back":"R = (5.9 × 5,280) ÷ 22,000 = 31,152 ÷ 22,000 = 1.416 ohms."}]};
+
+  var catMap={};
+  DATA.categories.forEach(function(c){catMap[c.id]=c});
+
+  var active={};                 // selected category ids
+  DATA.categories.forEach(function(c){active[c.id]=true});
+
+  var deck=[], pos=0, flipped=false, marks={};
+
+  var el=function(id){return document.getElementById(id)};
+  var filters=el('filters'), flip=el('flip'), donePanel=el('donePanel');
+  var frontText=el('frontText'), backText=el('backText');
+  var catF=el('catF'), catB=el('catB'), dotF=el('dotF'), dotB=el('dotB');
+  var cIdx=el('cIdx'), cTot=el('cTot'), cOk=el('cOk'), cNo=el('cNo'), cMeter=el('cMeter');
+
+  /* build filter chips */
+  var allChip=document.createElement('button');
+  allChip.className='chip on';
+  allChip.innerHTML='<i style="background:#fff"></i>All cards';
+  allChip.addEventListener('click',function(){
+    DATA.categories.forEach(function(c){active[c.id]=true});
+    syncChips(); build(true);
+  });
+  filters.appendChild(allChip);
+
+  DATA.categories.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='chip on';
+    b.dataset.cat=c.id;
+    var n=DATA.cards.filter(function(k){return k.cat===c.id}).length;
+    b.innerHTML='<i style="background:'+c.color+'"></i>'+c.name+' · '+n;
+    b.addEventListener('click',function(){
+      active[c.id]=!active[c.id];
+      if(!DATA.categories.some(function(x){return active[x.id]})) active[c.id]=true;
+      syncChips(); build(true);
+    });
+    filters.appendChild(b);
+  });
+
+  function syncChips(){
+    [].slice.call(filters.querySelectorAll('.chip[data-cat]')).forEach(function(b){
+      b.classList.toggle('on',!!active[b.dataset.cat]);
+    });
+    var all=DATA.categories.every(function(c){return active[c.id]});
+    allChip.classList.toggle('on',all);
+  }
+
+  function shuffle(a){
+    for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+    return a;
+  }
+
+  function build(reset){
+    deck=DATA.cards.filter(function(c){return active[c.cat]});
+    if(reset){pos=0;marks={};}
+    if(pos>=deck.length) pos=Math.max(0,deck.length-1);
+    render();
+  }
+
+  function render(){
+    cTot.textContent=deck.length;
+    var ok=0,no=0;
+    Object.keys(marks).forEach(function(k){marks[k]==='ok'?ok++:no++});
+    cOk.textContent=ok; cNo.textContent=no;
+    cMeter.style.width=deck.length?((Object.keys(marks).length/deck.length)*100)+'%':'0%';
+
+    if(!deck.length){
+      flip.style.display='none';
+      donePanel.classList.add('on');
+      el('doneMsg').textContent='No categories selected. Pick at least one above.';
+      cIdx.textContent='0';
+      return;
+    }
+
+    if(Object.keys(marks).length>=deck.length){
+      flip.style.display='none';
+      donePanel.classList.add('on');
+      el('doneMsg').textContent='You marked '+ok+' correct and flagged '+no+' to review out of '+deck.length+' cards.';
+      cIdx.textContent=deck.length;
+      return;
+    }
+
+    flip.style.display='';
+    donePanel.classList.remove('on');
+    var c=deck[pos];
+    var cat=catMap[c.cat];
+    frontText.textContent=c.front;
+    backText.textContent=c.back;
+    catF.textContent=cat.name;
+    catB.textContent='Answer · '+cat.name;
+    dotF.style.background=cat.color;
+    dotB.style.background=cat.color;
+    cIdx.textContent=pos+1;
+    setFlip(false);
+    var rs=document.getElementById('railSect');
+    if(document.body.classList.contains('mode-cards')) rs.textContent=cat.name;
+  }
+
+  function setFlip(v){flipped=v;flip.classList.toggle('flipped',v)}
+  function toggleFlip(){setFlip(!flipped)}
+
+  function step(d){
+    if(!deck.length) return;
+    var n=pos, guard=0;
+    do{
+      n=(n+d+deck.length)%deck.length;
+      guard++;
+    }while(marks[deck[n].id]&&guard<=deck.length);
+    pos=n; render();
+  }
+
+  function mark(v){
+    if(!deck.length) return;
+    marks[deck[pos].id]=v;
+    if(Object.keys(marks).length>=deck.length){render();return}
+    step(1);
+  }
+
+  flip.addEventListener('click',toggleFlip);
+  flip.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFlip()}
+  });
+  el('cFlip').addEventListener('click',toggleFlip);
+  el('cPrev').addEventListener('click',function(){step(-1)});
+  el('cNext').addEventListener('click',function(){step(1)});
+  el('cGood').addEventListener('click',function(){mark('ok')});
+  el('cAgain').addEventListener('click',function(){mark('no')});
+  el('cShuffle').addEventListener('click',function(){
+    build(true); shuffle(deck); pos=0; render();
+  });
+  el('againAll').addEventListener('click',function(){build(true)});
+  el('againMissed').addEventListener('click',function(){
+    var missed=Object.keys(marks).filter(function(k){return marks[k]==='no'});
+    if(!missed.length){build(true);return}
+    var ids={}; missed.forEach(function(k){ids[k]=1});
+    deck=DATA.cards.filter(function(c){return ids[c.id]});
+    marks={}; pos=0; render();
+  });
+
+  /* swipe on the card */
+  var sx=null,sy=null;
+  flip.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  flip.addEventListener('touchend',function(e){
+    if(sx===null) return;
+    var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)) step(dx<0?1:-1);
+    sx=null;sy=null;
+  },{passive:true});
+
+  /* mode switching */
+  var mS=el('mSlides'), mC=el('mCards');
+  function setMode(cards){
+    document.body.classList.toggle('mode-cards',cards);
+    mC.classList.toggle('active',cards);
+    mS.classList.toggle('active',!cards);
+    if(cards){build(false)}
+    else{
+      var s=document.querySelector('.slide.on');
+      document.getElementById('railSect').textContent=(s&&s.dataset.sect)||'';
+    }
+  }
+  mS.addEventListener('click',function(){setMode(false)});
+  mC.addEventListener('click',function(){setMode(true)});
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='c'||e.key==='C'){setMode(!document.body.classList.contains('mode-cards'));return}
+    if(!document.body.classList.contains('mode-cards')) return;
+    if(e.key==='ArrowRight'){e.preventDefault();step(1)}
+    if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}
+    if(e.key===' '||e.key==='f'||e.key==='F'){e.preventDefault();toggleFlip()}
+    if(e.key==='g'||e.key==='G'){e.preventDefault();mark('ok')}
+    if(e.key==='r'||e.key==='R'){e.preventDefault();mark('no')}
+    if(e.key==='s'||e.key==='S'){e.preventDefault();el('cShuffle').click()}
+  });
+
+  build(true);
+})();
+</script>
+</body>
+</html>
